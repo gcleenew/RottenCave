@@ -1,6 +1,6 @@
 package org.isep.rottencave;
 
-import org.isep.rottencave.generation.PVector;
+import org.isep.rottencave.generation.Point;
 import org.isep.rottencave.generation.ProceduralGeneration;
 import org.isep.rottencave.generation.Square;
 import org.isep.rottencave.generation.Triangle;
@@ -50,10 +50,10 @@ public class RottenCave extends ApplicationAdapter {
 			}
 			if(generation.isTriangulated) {
 				shape.setColor(Color.RED);
-				for(Triangle triangle: generation.dt.triangles){
-					PVector a = triangle.points[0];
-					PVector b = triangle.points[1];
-					PVector c = triangle.points[2];
+				for(Triangle triangle: generation.triangles){
+					Point a = triangle.p1;
+					Point b = triangle.p2;
+					Point c = triangle.p3;
 					shape.line((int) a.x, (int) a.y, (int) b.x, (int) b.y);
 					shape.line((int) a.x, (int) a.y, (int) c.x, (int) c.y);
 					shape.line((int) b.x, (int) b.y, (int) c.x, (int) c.y);

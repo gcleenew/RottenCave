@@ -7,10 +7,10 @@ public class ProceduralGeneration extends Thread{
 	public  ArrayList<Square> squareList;
 	public  double width_mean;
 	public  double height_mean;
-	public  DelaunayTriangulator dt;
-	public  ArrayList<PVector> points;
+	public  ArrayList<Point> points;
 	public  boolean isTriangulated = false;
 	public final Object squareListLock = new Object();
+	public ArrayList<Triangle> triangles;
 	
 	public static SphericalCoordinate getRandomPointInCircle(int radius){
 		double t = 2 * Math.PI * Math.random();
@@ -33,7 +33,8 @@ public class ProceduralGeneration extends Thread{
 	
 	public void createGeneration() {
 		squareList = new ArrayList<Square>();
-		points = new ArrayList<PVector>();	
+		points = new ArrayList<Point>();
+		triangles = new ArrayList<Triangle>();
 		Random randomGenerator = new Random();
 		double height_sum = 0;
 		double width_sum = 0;
@@ -75,15 +76,13 @@ public class ProceduralGeneration extends Thread{
 		//delaunay 
 		for (Square square: squareList) {
 			if(square.getIsMain()){
-				PVector p = new PVector((float) square.getCenterX(), (float) square.getCenterY());
+				Point p = new Point((float) square.getCenterX(), (float) square.getCenterY());
 				points.add(p);
 			}	
 		}
 		
 		
-		dt = new DelaunayTriangulator();
-		dt.points = points.toArray(new PVector[points.size()]);
-		dt.triangles = dt.Calculate();
+		triangles = Triangulate.triangulate(points);
 		isTriangulated = true;
 		System.out.println("triangulation faite");
 		
