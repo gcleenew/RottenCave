@@ -2,6 +2,8 @@ package org.isep.rottencave.generation;
 import java.util.ArrayList;
 import java.util.Random;
 
+import com.badlogic.gdx.Gdx;
+
 public class ProceduralGeneration extends Thread{
 	public  final int NUM_ELEMENT = 100;
 	public  ArrayList<Square> squareList;
@@ -84,7 +86,7 @@ public class ProceduralGeneration extends Thread{
 		
 		triangles = Triangulate.triangulate(points);
 		isTriangulated = true;
-		System.out.println("triangulation faite");
 		
+		Gdx.app.debug("Triangulation", "Triangulation faite");
 	}
 }
