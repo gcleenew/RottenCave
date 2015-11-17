@@ -2,7 +2,7 @@ package org.isep.rottencave.screens;
 
 import org.isep.rottencave.generation.Point;
 import org.isep.rottencave.generation.ProceduralGeneration;
-import org.isep.rottencave.generation.Square;
+import org.isep.rottencave.generation.Hall;
 import org.isep.rottencave.generation.Triangle;
 
 import com.badlogic.gdx.Game;
@@ -46,9 +46,9 @@ public class GenerationScreen implements Screen {
 		shape.begin(ShapeType.Line);
 		
 		shape.setColor(Color.BLACK);
-		if(generation.squareList!=null){
-			synchronized (generation.squareListLock) {		
-				for (Square square: generation.squareList){
+		if(generation.hallList!=null){
+			synchronized (generation.hallListLock) {		
+				for (Hall square: generation.hallList){
 					if(square.getLargeur() > generation.width_mean*1.15 && square.getLongueur() > generation.height_mean*1.15){
 						shape.setColor(Color.RED);
 						square.setIsMain(true);
@@ -66,6 +66,14 @@ public class GenerationScreen implements Screen {
 					shape.line((int) a.x, (int) a.y, (int) b.x, (int) b.y);
 					shape.line((int) a.x, (int) a.y, (int) c.x, (int) c.y);
 					shape.line((int) b.x, (int) b.y, (int) c.x, (int) c.y);
+				}
+			}
+			if(generation.isST){
+				shape.setColor(Color.BLUE);
+				for(Hall hall: generation.hallList){
+					for (Hall successor : hall.sucessors) {
+						shape.line((int) hall.getCenterX(), (int) hall.getCenterY(), (int) successor.getCenterX(), (int) successor.getCenterY());
+					}
 				}
 			}
 		}

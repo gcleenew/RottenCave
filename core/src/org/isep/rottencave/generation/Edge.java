@@ -1,11 +1,5 @@
 package org.isep.rottencave.generation;
-/**
- * 
- * Arista, linea o lado, no orientado. 
- * 
- * @author Benjamin Diaz
- *
- */
+
 public class Edge {
 	public Point p1, p2;
 	

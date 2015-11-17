@@ -1,32 +1,22 @@
 package org.isep.rottencave.generation;
 import java.util.ArrayList;
 import java.util.Random;
+import java.util.Stack;
 
 import com.badlogic.gdx.Gdx;
 
 public class ProceduralGeneration extends Thread{
 	public  final int NUM_ELEMENT = 100;
-	public  ArrayList<Square> squareList;
+	public  ArrayList<Hall> hallList;
 	public  double width_mean;
 	public  double height_mean;
 	public  ArrayList<Point> points;
 	public  boolean isTriangulated = false;
-	public final Object squareListLock = new Object();
+	public  boolean isST = false;
+	public final Object hallListLock = new Object();
 	public ArrayList<Triangle> triangles;
 	
-	public static SphericalCoordinate getRandomPointInCircle(int radius){
-		double t = 2 * Math.PI * Math.random();
-		double u = Math.random() + Math.random();
-		double r = 0;
-		if(u > 1){
-			r = 2 - u;
-		}
-		else {
-			r = u;
-		}
-		SphericalCoordinate point = new SphericalCoordinate(radius * r  * Math.cos(t), radius * r * Math.sin(t));
-		return point;
-	}
+	
 	
 	@Override
 	public void run() {
@@ -34,7 +24,7 @@ public class ProceduralGeneration extends Thread{
 	}
 	
 	public void createGeneration() {
-		squareList = new ArrayList<Square>();
+		hallList = new ArrayList<Hall>();
 		points = new ArrayList<Point>();
 		triangles = new ArrayList<Triangle>();
 		Random randomGenerator = new Random();
@@ -43,14 +33,16 @@ public class ProceduralGeneration extends Thread{
 		for(int i = 0; i < NUM_ELEMENT; i++){
 			int randomX = randomGenerator.nextInt(60);
 			int randomY = randomGenerator.nextInt(60);
-			SphericalCoordinate point = getRandomPointInCircle(75);
-			int posX = (int) point.getX() + 300;
-			int posY = (int) point.getY() + 300;
+			Point point = new Point(0, 0);
+			point.setRandomPositionInCircle(75);
+			point.x += 300;
+			point.y += 300;
 			int largeur = randomX + 7 ;
 			int longueur = randomY + 7;
-			Square square = new Square(posX, posY, largeur, longueur);
-			synchronized (squareListLock) {
-				squareList.add(square);
+			Hall square = new Hall(point, largeur, longueur);
+			point.setHall(square); 
+			synchronized (hallListLock) {
+				hallList.add(square);
 			}
 					
 			
@@ -63,9 +55,9 @@ public class ProceduralGeneration extends Thread{
 		boolean collision=true;
 		while(collision) {
 			collision=false;
-			for (Square square: squareList) {
-				collision = square.computeSeparation(squareList)? true: collision;
-				square.move();
+			for (Hall hall: hallList) {
+				collision = hall.computeSeparation(hallList)? true: collision;
+				hall.move();
 			}
 			try {
 				Thread.sleep(1);
@@ -76,9 +68,9 @@ public class ProceduralGeneration extends Thread{
 		}
 		
 		//delaunay 
-		for (Square square: squareList) {
-			if(square.getIsMain()){
-				Point p = new Point((float) square.getCenterX(), (float) square.getCenterY());
+		for (Hall hall: hallList) {
+			if(hall.getIsMain()){
+				Point p = hall.getPoint();
 				points.add(p);
 			}	
 		}
@@ -86,6 +78,64 @@ public class ProceduralGeneration extends Thread{
 		
 		triangles = Triangulate.triangulate(points);
 		isTriangulated = true;
+		
+		for (Hall hall: hallList) {
+			Gdx.app.debug("Hall", ""+hall.getPoint().x+" "+hall.getPoint().y);
+			for (Triangle triangle : triangles) {
+				if(triangle.p1.equals(hall.getPoint())) {
+					hall.neighbors.add(triangle.p2.getHall(hallList));
+					hall.neighbors.add(triangle.p3.getHall(hallList));
+				}
+				else if (triangle.p2.equals(hall.getPoint())) {
+					hall.neighbors.add(triangle.p1.getHall(hallList));
+					hall.neighbors.add(triangle.p3.getHall(hallList));
+				}
+				else if (triangle.p3.equals(hall.getPoint())) {
+					Gdx.app.debug("Triangle", ""+triangle.p1.x+" "+triangle.p1.y);
+					Gdx.app.debug("Triangle", ""+triangle.p2.x+" "+triangle.p2.y);
+					Gdx.app.debug("Triangle", ""+triangle.p3.x+" "+triangle.p3.y);
+					for (Hall hall2 : hallList) {
+						if(triangle.p1.posEquals(hall2.getPoint().x, hall2.getPoint().y)) {
+							Gdx.app.debug("Triangle et hall?", ""+triangle.p1.x+" "+triangle.p1.y);
+						}
+					}
+					Gdx.app.debug("hall final?", ""+triangle.p1.getHall(hallList).getPoint().x+ ""+triangle.p1.getHall(hallList).getPoint().y);
+					hall.neighbors.add(triangle.p1.getHall(hallList));
+					
+					hall.neighbors.add(triangle.p2.getHall(hallList));
+				}
+			}
+		}
+		
+		Stack<Hall> stack = new Stack<Hall>();
+		
+		Hall s = hallList.get(0);
+		float center =  Float.POSITIVE_INFINITY;
+		for (Hall hall : hallList) {
+			float norme = hall.getPoint().getNorme();
+			if(norme <= center) {
+				center = norme;
+				s = hall;
+			}
+		}
+		
+		stack.push(s);
+		s.isMarked = true;
+		while(!stack.empty()) {
+			Hall hall = stack.peek();
+			if(hall.markedNeighbors()) {
+				stack.pop();
+			}
+			else {
+				Hall sucessor = hall.getNotMarkedNeighbor();
+				sucessor.isMarked = true;
+				hall.sucessors.add(sucessor);
+				stack.push(sucessor);
+			}
+			
+		}
+		isTriangulated = false;
+		isST = true;
 		
 		Gdx.app.debug("Triangulation", "Triangulation faite");
 	}
