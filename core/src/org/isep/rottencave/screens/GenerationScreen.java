@@ -71,8 +71,6 @@ public class GenerationScreen implements Screen {
 		}
 		
 		shape.end();
-		
-		Gdx.app.debug("FPS", ""+Gdx.graphics.getFramesPerSecond());
 	}
 
 	@Override

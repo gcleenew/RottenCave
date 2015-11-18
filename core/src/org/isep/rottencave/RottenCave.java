@@ -11,6 +11,7 @@ public class RottenCave extends Game {
 	@Override
 	public void create () {
 		Gdx.app.setLogLevel(Application.LOG_DEBUG);
+		Gdx.app.debug("Viewport", "width : " + Gdx.graphics.getWidth() + " / height :" + Gdx.graphics.getHeight());
 		this.setScreen(new MainMenuScreen(this));
 	}
 
