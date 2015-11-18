@@ -83,12 +83,9 @@ public class Hall {
 	public Hall getNotLinkedNeighbor(){
 		for (Hall hall : neighbors) {
 			for (Hall sucessor : sucessors) {
-				for (Hall sucessorofsucessor : sucessor.sucessors) {
-					if(!hall.equals(sucessor) && !sucessorofsucessor.equals(this)) {
-						return hall;
-					}
+				if(!hall.equals(sucessor)) {
+					return hall;
 				}
-				
 			}
 		}
 		return null;

@@ -41,8 +41,8 @@ public class ProceduralGeneration extends Thread{
 			int randomY = randomGenerator.nextInt(60);
 			Point point = new Point(0, 0);
 			point.setRandomPositionInCircle(75);
-			point.x += 300;
-			point.y += 300;
+			point.x += 350;
+			point.y += 250;
 			int largeur = randomX + 7 ;
 			int longueur = randomY + 7;
 			Hall square = new Hall(point, largeur, longueur);
