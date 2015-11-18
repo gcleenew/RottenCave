@@ -40,11 +40,11 @@ public class MainMenuScreen implements Screen {
 
         batch.begin();
         font.draw(batch, "Welcome to Rotten Cave !!! ", 100, 150);
-        font.draw(batch, "Tap anywhere to generate a map !", 100, 100);
+        font.draw(batch, "Tap anywhere to try the GameEnvironement !", 100, 100);
         batch.end();
-
+        
         if (Gdx.input.isTouched()) {
-            game.setScreen(new GenerationScreen(game));
+            game.setScreen(new GameScreen(game));
             dispose();
         }
 
