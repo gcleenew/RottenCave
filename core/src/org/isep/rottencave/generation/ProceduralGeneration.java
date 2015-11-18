@@ -1,13 +1,18 @@
 package org.isep.rottencave.generation;
+import java.util.AbstractQueue;
 import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.Queue;
 import java.util.Random;
 import java.util.Stack;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Color;
 
 public class ProceduralGeneration extends Thread{
 	public  final int NUM_ELEMENT = 100;
 	public  ArrayList<Hall> hallList;
+	public  ArrayList<Hall> mainHallList;
 	public  double width_mean;
 	public  double height_mean;
 	public  ArrayList<Point> points;
@@ -25,6 +30,7 @@ public class ProceduralGeneration extends Thread{
 	
 	public void createGeneration() {
 		hallList = new ArrayList<Hall>();
+		mainHallList = new ArrayList<Hall>();
 		points = new ArrayList<Point>();
 		triangles = new ArrayList<Triangle>();
 		Random randomGenerator = new Random();
@@ -67,72 +73,81 @@ public class ProceduralGeneration extends Thread{
 			}
 		}
 		
+		for (Hall square: hallList){
+			if(square.getLargeur() > width_mean*1.15 && square.getLongueur() > height_mean*1.15){
+				square.setIsMain(true);
+			}
+		}
+		
 		//delaunay 
 		for (Hall hall: hallList) {
 			if(hall.getIsMain()){
 				Point p = hall.getPoint();
 				points.add(p);
+				mainHallList.add(hall);
 			}	
 		}
 		
 		
 		triangles = Triangulate.triangulate(points);
 		isTriangulated = true;
-		
-		for (Hall hall: hallList) {
-			Gdx.app.debug("Hall", ""+hall.getPoint().x+" "+hall.getPoint().y);
+		for (Hall hall: mainHallList) {
 			for (Triangle triangle : triangles) {
 				if(triangle.p1.equals(hall.getPoint())) {
-					hall.neighbors.add(triangle.p2.getHall(hallList));
-					hall.neighbors.add(triangle.p3.getHall(hallList));
+					hall.neighbors.add(triangle.p2.getHall(mainHallList));
+					hall.neighbors.add(triangle.p3.getHall(mainHallList));
 				}
 				else if (triangle.p2.equals(hall.getPoint())) {
-					hall.neighbors.add(triangle.p1.getHall(hallList));
-					hall.neighbors.add(triangle.p3.getHall(hallList));
+					hall.neighbors.add(triangle.p1.getHall(mainHallList));
+					hall.neighbors.add(triangle.p3.getHall(mainHallList));
 				}
 				else if (triangle.p3.equals(hall.getPoint())) {
-					Gdx.app.debug("Triangle", ""+triangle.p1.x+" "+triangle.p1.y);
-					Gdx.app.debug("Triangle", ""+triangle.p2.x+" "+triangle.p2.y);
-					Gdx.app.debug("Triangle", ""+triangle.p3.x+" "+triangle.p3.y);
-					for (Hall hall2 : hallList) {
-						if(triangle.p1.posEquals(hall2.getPoint().x, hall2.getPoint().y)) {
-							Gdx.app.debug("Triangle et hall?", ""+triangle.p1.x+" "+triangle.p1.y);
-						}
-					}
-					Gdx.app.debug("hall final?", ""+triangle.p1.getHall(hallList).getPoint().x+ ""+triangle.p1.getHall(hallList).getPoint().y);
-					hall.neighbors.add(triangle.p1.getHall(hallList));
-					
-					hall.neighbors.add(triangle.p2.getHall(hallList));
+					hall.neighbors.add(triangle.p1.getHall(mainHallList));
+					hall.neighbors.add(triangle.p2.getHall(mainHallList));
 				}
 			}
 		}
+		LinkedList<Hall> queue = new LinkedList<Hall>();
 		
-		Stack<Hall> stack = new Stack<Hall>();
-		
-		Hall s = hallList.get(0);
+		Hall s = mainHallList.get(0);
 		float center =  Float.POSITIVE_INFINITY;
-		for (Hall hall : hallList) {
+		for (Hall hall : mainHallList) {
 			float norme = hall.getPoint().getNorme();
+			Gdx.app.debug("norme :", ""+norme);
 			if(norme <= center) {
 				center = norme;
 				s = hall;
 			}
 		}
 		
-		stack.push(s);
+		int edgeNumber = 0;
+		
+		queue.add(s);
 		s.isMarked = true;
-		while(!stack.empty()) {
-			Hall hall = stack.peek();
-			if(hall.markedNeighbors()) {
-				stack.pop();
+		while(queue.size() != 0) {
+			Hall hall = queue.pop();
+			for (Hall neighbor : hall.neighbors) {
+				if(!neighbor.isMarked){
+					neighbor.isMarked = true;
+					hall.sucessors.add(neighbor);
+					queue.add(neighbor);
+					edgeNumber += 1;
+				}
+				
 			}
-			else {
-				Hall sucessor = hall.getNotMarkedNeighbor();
-				sucessor.isMarked = true;
-				hall.sucessors.add(sucessor);
-				stack.push(sucessor);
+		}
+		int addedEdges = (int) (edgeNumber * 40 / 100);
+		Gdx.app.debug("added", ""+addedEdges);
+		while (addedEdges > 0) {
+			for (Hall hall : mainHallList) {
+				if(hall.getNotLinkedNeighbor() != null && addedEdges > 0){
+					Hall neighbor =  hall.getNotLinkedNeighbor();
+					neighbor.isMarked = true;
+					hall.sucessors.add(neighbor);
+					addedEdges = addedEdges -1;
+					Gdx.app.debug("added", ""+addedEdges);
+				}
 			}
-			
 		}
 		isTriangulated = false;
 		isST = true;

@@ -49,9 +49,8 @@ public class GenerationScreen implements Screen {
 		if(generation.hallList!=null){
 			synchronized (generation.hallListLock) {		
 				for (Hall square: generation.hallList){
-					if(square.getLargeur() > generation.width_mean*1.15 && square.getLongueur() > generation.height_mean*1.15){
+					if(square.getIsMain()){
 						shape.setColor(Color.RED);
-						square.setIsMain(true);
 					}
 					shape.rect((int) square.getPosX() , (int) square.getPosY(), (int) square.getLargeur() , (int) square.getLongueur() );
 					shape.setColor(Color.BLACK);
@@ -70,7 +69,7 @@ public class GenerationScreen implements Screen {
 			}
 			if(generation.isST){
 				shape.setColor(Color.BLUE);
-				for(Hall hall: generation.hallList){
+				for(Hall hall: generation.mainHallList){
 					for (Hall successor : hall.sucessors) {
 						shape.line((int) hall.getCenterX(), (int) hall.getCenterY(), (int) successor.getCenterX(), (int) successor.getCenterY());
 					}
@@ -80,7 +79,7 @@ public class GenerationScreen implements Screen {
 		
 		shape.end();
 		
-		Gdx.app.debug("FPS", ""+Gdx.graphics.getFramesPerSecond());
+		//Gdx.app.debug("FPS", ""+Gdx.graphics.getFramesPerSecond());
 	}
 
 	@Override

@@ -13,7 +13,7 @@ public class Hall {
 	
 	private boolean isMain;
 	
-	public boolean isMarked;
+	public boolean isMarked = false;
 	
 	public ArrayList<Hall> neighbors;
 	public ArrayList<Hall> sucessors;
@@ -75,6 +75,20 @@ public class Hall {
 		for (Hall hall : neighbors) {
 			if (!hall.isMarked) {
 				return hall;
+			}
+		}
+		return null;
+	}
+	
+	public Hall getNotLinkedNeighbor(){
+		for (Hall hall : neighbors) {
+			for (Hall sucessor : sucessors) {
+				for (Hall sucessorofsucessor : sucessor.sucessors) {
+					if(!hall.equals(sucessor) && !sucessorofsucessor.equals(this)) {
+						return hall;
+					}
+				}
+				
 			}
 		}
 		return null;
