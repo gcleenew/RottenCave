@@ -1,6 +1,7 @@
 package org.isep.rottencave.screens;
 
-import com.badlogic.gdx.Game;
+import org.isep.rottencave.RottenCave;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
@@ -9,12 +10,12 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 public class MainMenuScreen implements Screen {
-	final Game game;
+	private final RottenCave game;
 	private SpriteBatch batch;
 	private BitmapFont font;
 	private OrthographicCamera camera;
 	
-	public MainMenuScreen(final Game game) {
+	public MainMenuScreen(final RottenCave game) {
 		this.game= game;
 		
 		camera = new OrthographicCamera();
@@ -40,7 +41,7 @@ public class MainMenuScreen implements Screen {
 
         batch.begin();
         font.draw(batch, "Welcome to Rotten Cave !!! ", 100, 150);
-        font.draw(batch, "Tap anywhere to generate a map !", 100, 100);
+        font.draw(batch, "Tap anywhere to test the score screen !", 100, 100);
         batch.end();
 
         if (Gdx.input.isTouched()) {
