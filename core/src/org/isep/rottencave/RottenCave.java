@@ -27,6 +27,7 @@ public class RottenCave extends Game {
 	@Override
 	public void dispose() {
 		super.dispose();
+		uiSkin.dispose();
 	}
 
 	public Skin getUiSkin() {

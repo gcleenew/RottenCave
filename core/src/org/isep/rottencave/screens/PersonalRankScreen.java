@@ -1,44 +1,29 @@
 package org.isep.rottencave.screens;
 
 import org.isep.rottencave.RottenCave;
+import org.isep.rottencave.score.PersonalLeaderBoard;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
-import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 
 public class PersonalRankScreen implements Screen {
 	private final RottenCave game;
 	private Stage stage;
-	private Table table;
 	private Skin uiSkin;
 	
 	public PersonalRankScreen(final RottenCave game) {
 		this.game = game;
 		this.uiSkin = game.getUiSkin();
+		
 		stage = new Stage(new ScreenViewport());
 		Gdx.input.setInputProcessor(stage);
 		
-		table = createBaseTable();
-		stage.addActor(table);
-		
-		// Draw table bounds
-		table.setDebug(true);
-	}
-	
-	private Table createBaseTable() {
-		table = new Table(uiSkin);
-		table.setFillParent(true);
-		
-		Label leaderBoard = new Label("Leaderboard", uiSkin);
-		
-		table.add(leaderBoard);
-		
-		return table;
+		PersonalLeaderBoard leaderBoard = new PersonalLeaderBoard(uiSkin);
+		stage.addActor(leaderBoard.getContainer());
 	}
 	
 	@Override
