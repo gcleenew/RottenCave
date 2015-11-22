@@ -6,6 +6,9 @@ import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
@@ -15,23 +18,28 @@ import com.badlogic.gdx.physics.box2d.ChainShape;
 import com.badlogic.gdx.physics.box2d.CircleShape;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.World;
+import com.badlogic.gdx.utils.Array;
 
 public class GameScreen implements Screen {
 	final Game game;
+	
+	private SpriteBatch batch;
 	private OrthographicCamera camera;
 	private World world;
 	private Box2DDebugRenderer debugRenderer;
 	private Body playerBody;
-	
+	private Sprite playerSprite;
+	private Array<Body> tmpBodies = new Array<Body>();
 	
 	public final static float WOLRD_WIDTH = 6.4f;
 	public final static float WORLD_HEIGHT = 4.0f;
 	
 	public GameScreen(final Game game) {
 		this.game=game;	
+		
+		batch = new SpriteBatch();
 		camera = new OrthographicCamera();
 		camera.setToOrtho(false, WOLRD_WIDTH/2, WORLD_HEIGHT/2);
-		
 		world = new World(new Vector2(0f, 0f), true);
 		debugRenderer = new Box2DDebugRenderer(true,true,true,true,true,true);
 		
@@ -64,6 +72,9 @@ public class GameScreen implements Screen {
 		
 		playerBody.createFixture(firstFixtureDef);
 		
+		playerSprite = new Sprite(new Texture(Gdx.files.internal("img/playerSprite.png")));
+		playerBody.setUserData(playerSprite);
+		playerSprite.setSize(0.2f, 0.2f);
 	}
 	
 	private void createStaticMap(){
@@ -105,6 +116,21 @@ public class GameScreen implements Screen {
 		camera.position.set(playerBody.getPosition(), 0f);
 		camera.update();
 		
+		
+		batch.setProjectionMatrix(camera.combined);
+		
+		batch.begin();
+		world.getBodies(tmpBodies);
+		for(Body curBody : tmpBodies){
+			if(curBody.getUserData()!=null && curBody.getUserData() instanceof Sprite){
+				Sprite sprite = (Sprite)curBody.getUserData();
+				sprite.setPosition(curBody.getPosition().x - sprite.getWidth() / 2, curBody.getPosition().y - sprite.getHeight() /2);
+				sprite.draw(batch);
+			}
+		}
+
+		batch.end();
+
 		world.step(1/60f, 6, 2);
 
 	}
