@@ -13,11 +13,14 @@ public class ProceduralGeneration extends Thread{
 	public  final int NUM_ELEMENT = 100;
 	public  ArrayList<Hall> hallList;
 	public  ArrayList<Hall> mainHallList;
+	public 	ArrayList<Corridor> corridorList;
+	
 	public  double width_mean;
 	public  double height_mean;
 	public  ArrayList<Point> points;
 	public  boolean isTriangulated = false;
 	public  boolean isST = false;
+	public  boolean isCorridored = false;
 	public final Object hallListLock = new Object();
 	public ArrayList<Triangle> triangles;
 	
@@ -33,6 +36,7 @@ public class ProceduralGeneration extends Thread{
 		mainHallList = new ArrayList<Hall>();
 		points = new ArrayList<Point>();
 		triangles = new ArrayList<Triangle>();
+		corridorList = new ArrayList<Corridor>();
 		Random randomGenerator = new Random();
 		double height_sum = 0;
 		double width_sum = 0;
@@ -151,6 +155,20 @@ public class ProceduralGeneration extends Thread{
 		}
 		isTriangulated = false;
 		isST = true;
+		
+		
+		for (Hall hall : mainHallList) {
+			for (Hall sucessor : hall.sucessors) {
+				if(!Corridor.getExist(corridorList, hall, sucessor)) {
+					Corridor corridor = new Corridor(hall, sucessor);
+					corridorList.add(corridor);
+				}
+			}
+		}
+		isST = false;
+		isCorridored = true;
+		
+		
 		
 		Gdx.app.debug("Triangulation", "Triangulation faite");
 	}

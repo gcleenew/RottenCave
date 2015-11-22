@@ -1,5 +1,6 @@
 package org.isep.rottencave.screens;
 
+import org.isep.rottencave.generation.Corridor;
 import org.isep.rottencave.generation.Point;
 import org.isep.rottencave.generation.ProceduralGeneration;
 import org.isep.rottencave.generation.Hall;
@@ -73,6 +74,13 @@ public class GenerationScreen implements Screen {
 					for (Hall successor : hall.sucessors) {
 						shape.line((int) hall.getCenterX(), (int) hall.getCenterY(), (int) successor.getCenterX(), (int) successor.getCenterY());
 					}
+				}
+			}
+			if(generation.isCorridored) {
+				shape.setColor(Color.GREEN);
+				for (Corridor corridor : generation.corridorList) {
+					shape.line((int) corridor.entree1.x, (int) corridor.entree1.y, corridor.passage.x, corridor.passage.y);
+					shape.line(corridor.passage.x, corridor.passage.y, (int) corridor.entree2.x, (int) corridor.entree2.y);
 				}
 			}
 		}
