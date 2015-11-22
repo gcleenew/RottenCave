@@ -29,14 +29,11 @@ public class GenerationScreen implements Screen {
 		camera.setToOrtho(false, 800, 400);
 		generation = new ProceduralGeneration();
 		shape = new ShapeRenderer();
-		
-		generation.start();
 	}
 	
 	@Override
 	public void show() {
-		// TODO Auto-generated method stub
-
+		generation.start();
 	}
 
 	@Override

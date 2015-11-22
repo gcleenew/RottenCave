@@ -1,83 +1,94 @@
 package org.isep.rottencave.screens;
 
-import com.badlogic.gdx.Game;
+import org.isep.rottencave.RottenCave;
+import org.isep.rottencave.scene2d.ButtonRedirectListener;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.g2d.BitmapFont;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.utils.viewport.ScreenViewport;
 
 public class MainMenuScreen implements Screen {
-	final Game game;
-	private SpriteBatch batch;
-	private BitmapFont font;
-	private OrthographicCamera camera;
+	private final RottenCave game;
+	private Skin uiSkin;
+	private Stage stage;
 	
-	public MainMenuScreen(final Game game) {
+	public MainMenuScreen(final RottenCave game) {
 		this.game= game;
-		
-		camera = new OrthographicCamera();
-		camera.setToOrtho(false, 800, 400);
-		
-		batch = new SpriteBatch();
-		font = new BitmapFont();
+		this.uiSkin = game.getUiSkin();
 	}
-	
+
 	@Override
 	public void show() {
-		// TODO Auto-generated method stub
-
+		stage = new Stage(new ScreenViewport());
+		Gdx.input.setInputProcessor(stage);
+		createStaticMenu();
 	}
 
 	@Override
 	public void render(float delta) {
-		Gdx.gl.glClearColor(0, 0, 0.2f, 1);
+		Gdx.gl.glClearColor(0, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-
-        camera.update();
-        batch.setProjectionMatrix(camera.combined);
-
-        batch.begin();
-        font.draw(batch, "Welcome to Rotten Cave !!! ", 100, 150);
-        font.draw(batch, "Tap anywhere to generate a map !", 100, 100);
-        batch.end();
-
-        if (Gdx.input.isTouched()) {
-            game.setScreen(new GenerationScreen(game));
-            dispose();
-        }
-
+	    stage.act(delta);
+	    stage.draw();
 	}
 
 	@Override
 	public void resize(int width, int height) {
-		// TODO Auto-generated method stub
-
+		stage.getViewport().update(width, height, true);
 	}
 
 	@Override
 	public void pause() {
-		// TODO Auto-generated method stub
-
+		
 	}
 
 	@Override
 	public void resume() {
-		// TODO Auto-generated method stub
-
+		
 	}
 
 	@Override
 	public void hide() {
-		// TODO Auto-generated method stub
-
+		
 	}
 
 	@Override
 	public void dispose() {
-		batch.dispose();
-		font.dispose();
+		stage.dispose();
 	}
+	
+	private void createStaticMenu() {
+		Table container = new Table();
+		container.setFillParent(true);
+		container.top();
+		stage.addActor(container);
 
+		Label rottenCave = new Label("Rotten Cave", uiSkin, "title");
+		TextButton jouer = new TextButton("JOUER", uiSkin);
+		jouer.addListener(new ButtonRedirectListener(game, new GenerationScreen(game)));
+		TextButton scores = new TextButton("SCORES", uiSkin);
+		scores.addListener(new ButtonRedirectListener(game, new PersonalRankScreen(game)));
+		TextButton config = new TextButton("CONFIGURATION", uiSkin);
+		Label version = new Label ("Version "+ RottenCave.VERSION, uiSkin);
+		
+		Table buttonContainer = new Table();
+		buttonContainer.defaults().pad(10);
+		buttonContainer.add(jouer);
+		buttonContainer.row();
+		buttonContainer.add(scores);
+		buttonContainer.row();
+		buttonContainer.add(config);
+		
+		container.add(rottenCave).padTop(10);
+		container.row();
+		container.add(buttonContainer).expand().fill().top();
+		container.row();
+		container.add(version).bottom();
+	}
 }
