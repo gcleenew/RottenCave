@@ -1,5 +1,6 @@
 package org.isep.rottencave.screens;
 
+import org.isep.rottencave.GlobalConfiguration;
 import org.isep.rottencave.RottenCave;
 import org.isep.rottencave.scene2d.ButtonRedirectListener;
 
@@ -75,7 +76,7 @@ public class MainMenuScreen implements Screen {
 		TextButton scores = new TextButton("SCORES", uiSkin);
 		scores.addListener(new ButtonRedirectListener(game, new PersonalRankScreen(game)));
 		TextButton config = new TextButton("CONFIGURATION", uiSkin);
-		Label version = new Label ("Version "+ RottenCave.VERSION, uiSkin);
+		Label version = new Label ("Version "+ GlobalConfiguration.VERSION, uiSkin);
 		
 		Table buttonContainer = new Table();
 		buttonContainer.defaults().pad(10);
