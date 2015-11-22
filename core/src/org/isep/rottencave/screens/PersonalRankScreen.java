@@ -18,13 +18,13 @@ public class PersonalRankScreen implements Screen {
 	public PersonalRankScreen(final RottenCave game) {
 		this.game = game;
 		this.uiSkin = game.getUiSkin();
-		stage = new Stage(new ScreenViewport());
-		PersonalLeaderBoard leaderBoard = new PersonalLeaderBoard(uiSkin);
-		stage.addActor(leaderBoard.getContainer());
 	}
 	
 	@Override
 	public void show() {
+		stage = new Stage(new ScreenViewport());
+		PersonalLeaderBoard leaderBoard = new PersonalLeaderBoard(game, uiSkin);
+		stage.addActor(leaderBoard.getContainer());
 		Gdx.input.setInputProcessor(stage);
 	}
 

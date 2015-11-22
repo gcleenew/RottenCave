@@ -2,16 +2,22 @@ package org.isep.rottencave.score;
 
 import java.util.List;
 
+import org.isep.rottencave.RottenCave;
+import org.isep.rottencave.scene2d.ButtonRedirectListener;
+import org.isep.rottencave.screens.MainMenuScreen;
+
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 
 public class PersonalLeaderBoard {
+	private RottenCave game;
 	private Table container;
 	private Table scoreTable;
 	private Skin uiSkin;
 	
-	public PersonalLeaderBoard(Skin skin) {
+	public PersonalLeaderBoard(RottenCave game, Skin skin) {
+		this.game = game;
 		this.uiSkin = skin;
 		createStaticContent();
 		fillLeaderBoard();
@@ -24,6 +30,8 @@ public class PersonalLeaderBoard {
 		scoreTable = new Table();
 		
 		Label leaderBoard = new Label("LEADERBOARD", uiSkin, "title");
+		Label returnLabel = new Label("Menu", uiSkin);
+		returnLabel.addListener(new ButtonRedirectListener(game, new MainMenuScreen(game)));
 		Label date = new Label("DATE", uiSkin);
 		Label score = new Label("SCORE", uiSkin);
 		Label seed = new Label("SEED", uiSkin);
@@ -34,6 +42,8 @@ public class PersonalLeaderBoard {
 		container.add(leaderBoard).expandX();
 		container.row().padTop(15);
 		container.add(scoreTable).expand().fillX().top();
+		container.row();
+		container.add(returnLabel).bottom().left().pad(10);
 	}
 	
 	/**

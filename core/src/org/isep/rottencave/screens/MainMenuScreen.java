@@ -21,14 +21,13 @@ public class MainMenuScreen implements Screen {
 	public MainMenuScreen(final RottenCave game) {
 		this.game= game;
 		this.uiSkin = game.getUiSkin();
-		stage = new Stage(new ScreenViewport());
-		createStaticMenu();
 	}
 
 	@Override
 	public void show() {
-		// Set input processor in shwo method to avoid loose of event listener
+		stage = new Stage(new ScreenViewport());
 		Gdx.input.setInputProcessor(stage);
+		createStaticMenu();
 	}
 
 	@Override
@@ -61,7 +60,7 @@ public class MainMenuScreen implements Screen {
 
 	@Override
 	public void dispose() {
-		
+		stage.dispose();
 	}
 	
 	private void createStaticMenu() {
