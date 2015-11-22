@@ -23,6 +23,10 @@ public class PersonalScoreDAO {
 	
 	private PersonalScoreDAO() {
 		json = new Json();
+		// Create file if not exists
+		if (!JSON_SCORE_FILE.exists()){
+			JSON_SCORE_FILE.writeString("", false);
+		}
 	}
 	
 	public List<PersonalScore> getPersonalScores() {
@@ -47,7 +51,7 @@ public class PersonalScoreDAO {
 	}
 	
 	public void flushSave() {
-		JSON_SCORE_FILE.writeString("", false);;
+		JSON_SCORE_FILE.writeString("", false);
 	}
 	
 	public static PersonalScoreDAO getPersonalScoreDAO() {

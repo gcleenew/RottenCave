@@ -8,6 +8,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 
 public class RottenCave extends Game {
+	public static final String VERSION = "0.1"; 
 	private Skin uiSkin;
 	
 	@Override

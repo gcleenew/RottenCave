@@ -19,8 +19,6 @@ public class PersonalLeaderBoard {
 	
 	private void createStaticContent() {
 		container = new Table();
-		// TODO Remove debug drawing
-//		container.setDebug(true);
 		container.setFillParent(true);
 		container.top();
 		scoreTable = new Table();
