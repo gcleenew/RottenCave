@@ -1,6 +1,6 @@
 package org.isep.rottencave.score;
 
-import java.util.Date;
+import java.util.List;
 
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
@@ -40,19 +40,18 @@ public class PersonalLeaderBoard {
 	
 	/**
 	 * Fill leaderboard with local scores
-	 * TODO Manage local score creation with local JSON
 	 */
 	private void fillLeaderBoard() {
-		PersonalScore ps = new PersonalScore(new Date(), 32, 1);
-		addScoreToLeaderBoard(ps);
-		ps = new PersonalScore(new Date(), 323, 2);
-		addScoreToLeaderBoard(ps);
-		ps = new PersonalScore(new Date(), 3243, 3);
+		PersonalScoreDAO psDAO = PersonalScoreDAO.getPersonalScoreDAO();
+		List<PersonalScore> scores = psDAO.getPersonalScores();
+		for (PersonalScore personalScore : scores) {
+			addScoreToLeaderBoard(personalScore);
+		}
 	}
 	
 	private void addScoreToLeaderBoard(PersonalScore ps) {
 		scoreTable.row();
-		scoreTable.add(new Label(ps.getDate().toString(), uiSkin));
+		scoreTable.add(new Label(ps.getDate(), uiSkin));
 		scoreTable.add(new Label(""+ps.getScore(), uiSkin));
 		scoreTable.add(new Label(""+ps.getSeed(), uiSkin));
 	}
