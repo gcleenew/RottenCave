@@ -35,7 +35,7 @@ public class Point {
 	}
 	
 	public float getNorme(){
-		return (float) Math.abs(Math.sqrt((x-350)*(x-350) + (y-250)*(y-250)));
+		return (float) Math.abs(Math.sqrt((x-350)*(x-350) + (y-250)*(y-250)))*ProceduralGeneration.TILE_SIZE;
 	}
 	
 	public void setHall(Hall hall) {

@@ -10,6 +10,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 
 public class ProceduralGeneration extends Thread{
+	public static int TILE_SIZE = 1;
 	public  final int NUM_ELEMENT = 100;
 	public  ArrayList<Hall> hallList;
 	public  ArrayList<Hall> mainHallList;
@@ -41,14 +42,14 @@ public class ProceduralGeneration extends Thread{
 		double height_sum = 0;
 		double width_sum = 0;
 		for(int i = 0; i < NUM_ELEMENT; i++){
-			int randomX = randomGenerator.nextInt(60);
-			int randomY = randomGenerator.nextInt(60);
+			int randomX = randomGenerator.nextInt(60*TILE_SIZE);
+			int randomY = randomGenerator.nextInt(60*TILE_SIZE);
 			Point point = new Point(0, 0);
-			point.setRandomPositionInCircle(75);
-			point.x += 350;
-			point.y += 250;
-			int largeur = randomX + 7 ;
-			int longueur = randomY + 7;
+			point.setRandomPositionInCircle(75*TILE_SIZE);
+			point.x += 350*TILE_SIZE;
+			point.y += 250*TILE_SIZE;
+			int largeur = (randomX + 7)*TILE_SIZE;
+			int longueur = (randomY + 7)*TILE_SIZE;
 			Hall square = new Hall(point, largeur, longueur);
 			point.setHall(square); 
 			synchronized (hallListLock) {
