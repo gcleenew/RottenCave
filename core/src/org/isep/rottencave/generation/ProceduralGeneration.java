@@ -118,7 +118,6 @@ public class ProceduralGeneration extends Thread{
 		float center =  Float.POSITIVE_INFINITY;
 		for (Hall hall : mainHallList) {
 			float norme = hall.getPoint().getNorme();
-			Gdx.app.debug("norme :", ""+norme);
 			if(norme <= center) {
 				center = norme;
 				s = hall;
@@ -142,7 +141,6 @@ public class ProceduralGeneration extends Thread{
 			}
 		}
 		int addedEdges = (int) (edgeNumber * 40 / 100);
-		Gdx.app.debug("added", ""+addedEdges);
 		while (addedEdges > 0) {
 			for (Hall hall : mainHallList) {
 				if(hall.getNotLinkedNeighbor() != null && addedEdges > 0){
@@ -150,7 +148,6 @@ public class ProceduralGeneration extends Thread{
 					neighbor.isMarked = true;
 					hall.sucessors.add(neighbor);
 					addedEdges = addedEdges -1;
-					Gdx.app.debug("added", ""+addedEdges);
 				}
 			}
 		}
