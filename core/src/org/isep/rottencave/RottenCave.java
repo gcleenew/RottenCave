@@ -1,5 +1,7 @@
 package org.isep.rottencave;
 
+import org.isep.rottencave.score.ScoreResponseListener;
+import org.isep.rottencave.score.ScoreRestClient;
 import org.isep.rottencave.screens.MainMenuScreen;
 
 import com.badlogic.gdx.Application;
@@ -17,6 +19,9 @@ public class RottenCave extends Game {
 		uiSkin = new Skin(Gdx.files.internal("uiskin.json"));
 		
 		this.setScreen(new MainMenuScreen(this));
+		
+		ScoreRestClient client = ScoreRestClient.getScoreRestClient();
+		client.getScoreById(1);
 	}
 
 	@Override
