@@ -1,6 +1,7 @@
 package org.isep.rottencave.generation;
 
 import java.util.ArrayList;
+import java.util.Random;
 
 import com.badlogic.gdx.Gdx;
 
@@ -63,9 +64,9 @@ public class Point {
 		return false;
 	}
 	
-	public void setRandomPositionInCircle(int radius){
-		double t = 2 * Math.PI * Math.random();
-		double u = Math.random() + Math.random();
+	public void setRandomPositionInCircle(int radius, Random randomGenerator){
+		double t = 2 * Math.PI * randomGenerator.nextDouble();
+		double u = randomGenerator.nextDouble() + randomGenerator.nextDouble();
 		double r = 0;
 		if(u > 1){
 			r = 2 - u;
