@@ -1,8 +1,9 @@
 package org.isep.rottencave.screens;
 
+import org.isep.rottencave.generation.Corridor;
 import org.isep.rottencave.generation.Point;
 import org.isep.rottencave.generation.ProceduralGeneration;
-import org.isep.rottencave.generation.Square;
+import org.isep.rottencave.generation.Hall;
 import org.isep.rottencave.generation.Triangle;
 
 import com.badlogic.gdx.Game;
@@ -29,14 +30,11 @@ public class GenerationScreen implements Screen {
 		camera.setToOrtho(false, 800, 400);
 		generation = new ProceduralGeneration();
 		shape = new ShapeRenderer();
-		
-		generation.start();
 	}
 	
 	@Override
 	public void show() {
-		// TODO Auto-generated method stub
-
+		generation.start();
 	}
 
 	@Override
@@ -46,12 +44,11 @@ public class GenerationScreen implements Screen {
 		shape.begin(ShapeType.Line);
 		
 		shape.setColor(Color.BLACK);
-		if(generation.squareList!=null){
-			synchronized (generation.squareListLock) {		
-				for (Square square: generation.squareList){
-					if(square.getLargeur() > generation.width_mean*1.15 && square.getLongueur() > generation.height_mean*1.15){
+		if(generation.hallList!=null){
+			synchronized (generation.hallListLock) {		
+				for (Hall square: generation.hallList){
+					if(square.getIsMain()){
 						shape.setColor(Color.RED);
-						square.setIsMain(true);
 					}
 					shape.rect((int) square.getPosX() , (int) square.getPosY(), (int) square.getLargeur() , (int) square.getLongueur() );
 					shape.setColor(Color.BLACK);
@@ -68,11 +65,26 @@ public class GenerationScreen implements Screen {
 					shape.line((int) b.x, (int) b.y, (int) c.x, (int) c.y);
 				}
 			}
+			if(generation.isST){
+				shape.setColor(Color.BLUE);
+				for(Hall hall: generation.mainHallList){
+					for (Hall successor : hall.sucessors) {
+						shape.line((int) hall.getCenterX(), (int) hall.getCenterY(), (int) successor.getCenterX(), (int) successor.getCenterY());
+					}
+				}
+			}
+			if(generation.isCorridored) {
+				shape.setColor(Color.GREEN);
+				for (Corridor corridor : generation.corridorList) {
+					shape.line((int) corridor.entree1.x, (int) corridor.entree1.y, corridor.passage.x, corridor.passage.y);
+					shape.line(corridor.passage.x, corridor.passage.y, (int) corridor.entree2.x, (int) corridor.entree2.y);
+				}
+			}
 		}
 		
 		shape.end();
 		
-		Gdx.app.debug("FPS", ""+Gdx.graphics.getFramesPerSecond());
+		//Gdx.app.debug("FPS", ""+Gdx.graphics.getFramesPerSecond());
 	}
 
 	@Override

@@ -1,15 +1,15 @@
 package org.isep.rottencave.generation;
 
-/**
- * 
- * Punto en un plano euclideano.
- * 
- * @author Benjamin Diaz
- *
- */
+import java.util.ArrayList;
+import java.util.Random;
+
+import com.badlogic.gdx.Gdx;
+
 public class Point {
 
 	public float x, y, z;
+	
+	private Hall hall;
 
 	public Point(float x, float y) {
 		this.x = x;
@@ -23,6 +23,24 @@ public class Point {
 	}
 
 	public Point() {
+	}
+	
+	public Hall getHall(ArrayList<Hall> hallList) {
+		for (Hall hall : hallList) {
+			if(this.posEquals(hall.getPoint().x, hall.getPoint().y)) {
+				return hall;
+				
+			}
+		}
+		return null;
+	}
+	
+	public float getNorme(){
+		return (float) Math.abs(Math.sqrt((x-350)*(x-350) + (y-250)*(y-250)))*ProceduralGeneration.TILE_SIZE;
+	}
+	
+	public void setHall(Hall hall) {
+		this.hall = hall;
 	}
 
 	@Override
@@ -38,7 +56,27 @@ public class Point {
 		}
 		return false;
 	}
-
+	
+	public boolean posEquals(float x, float y) {
+		if( this.x == x && this.y == y) {
+			return true;
+		}
+		return false;
+	}
+	
+	public void setRandomPositionInCircle(int radius, Random randomGenerator){
+		double t = 2 * Math.PI * randomGenerator.nextDouble();
+		double u = randomGenerator.nextDouble() + randomGenerator.nextDouble();
+		double r = 0;
+		if(u > 1){
+			r = 2 - u;
+		}
+		else {
+			r = u;
+		}
+		this.x = (float) (radius * r  * Math.cos(t));
+		this.y = (float) (radius * r * Math.sin(t));
+	}
 	@Override
 	public int hashCode() {
 		int hash = 7;

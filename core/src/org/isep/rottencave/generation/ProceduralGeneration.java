@@ -1,32 +1,31 @@
 package org.isep.rottencave.generation;
+import java.util.AbstractQueue;
 import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.Queue;
 import java.util.Random;
+import java.util.Stack;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Color;
 
 public class ProceduralGeneration extends Thread{
+	public static int TILE_SIZE = 1;
 	public  final int NUM_ELEMENT = 100;
-	public  ArrayList<Square> squareList;
+	public  ArrayList<Hall> hallList;
+	public  ArrayList<Hall> mainHallList;
+	public 	ArrayList<Corridor> corridorList;
+	
 	public  double width_mean;
 	public  double height_mean;
 	public  ArrayList<Point> points;
 	public  boolean isTriangulated = false;
-	public final Object squareListLock = new Object();
+	public  boolean isST = false;
+	public  boolean isCorridored = false;
+	public final Object hallListLock = new Object();
 	public ArrayList<Triangle> triangles;
 	
-	public static SphericalCoordinate getRandomPointInCircle(int radius){
-		double t = 2 * Math.PI * Math.random();
-		double u = Math.random() + Math.random();
-		double r = 0;
-		if(u > 1){
-			r = 2 - u;
-		}
-		else {
-			r = u;
-		}
-		SphericalCoordinate point = new SphericalCoordinate(radius * r  * Math.cos(t), radius * r * Math.sin(t));
-		return point;
-	}
+	
 	
 	@Override
 	public void run() {
@@ -34,23 +33,27 @@ public class ProceduralGeneration extends Thread{
 	}
 	
 	public void createGeneration() {
-		squareList = new ArrayList<Square>();
+		hallList = new ArrayList<Hall>();
+		mainHallList = new ArrayList<Hall>();
 		points = new ArrayList<Point>();
 		triangles = new ArrayList<Triangle>();
-		Random randomGenerator = new Random();
+		corridorList = new ArrayList<Corridor>();
+		Random randomGenerator = new Random(1000L);
 		double height_sum = 0;
 		double width_sum = 0;
 		for(int i = 0; i < NUM_ELEMENT; i++){
-			int randomX = randomGenerator.nextInt(60);
-			int randomY = randomGenerator.nextInt(60);
-			SphericalCoordinate point = getRandomPointInCircle(75);
-			int posX = (int) point.getX() + 300;
-			int posY = (int) point.getY() + 300;
-			int largeur = randomX + 7 ;
-			int longueur = randomY + 7;
-			Square square = new Square(posX, posY, largeur, longueur);
-			synchronized (squareListLock) {
-				squareList.add(square);
+			int randomX = randomGenerator.nextInt(60*TILE_SIZE);
+			int randomY = randomGenerator.nextInt(60*TILE_SIZE);
+			Point point = new Point(0, 0);
+			point.setRandomPositionInCircle(75*TILE_SIZE, randomGenerator);
+			point.x += 350*TILE_SIZE;
+			point.y += 250*TILE_SIZE;
+			int largeur = (randomX + 7)*TILE_SIZE;
+			int longueur = (randomY + 7)*TILE_SIZE;
+			Hall square = new Hall(point, largeur, longueur);
+			point.setHall(square); 
+			synchronized (hallListLock) {
+				hallList.add(square);
 			}
 					
 			
@@ -63,9 +66,9 @@ public class ProceduralGeneration extends Thread{
 		boolean collision=true;
 		while(collision) {
 			collision=false;
-			for (Square square: squareList) {
-				collision = square.computeSeparation(squareList)? true: collision;
-				square.move();
+			for (Hall hall: hallList) {
+				collision = hall.computeSeparation(hallList)? true: collision;
+				hall.move();
 			}
 			try {
 				Thread.sleep(1);
@@ -75,17 +78,95 @@ public class ProceduralGeneration extends Thread{
 			}
 		}
 		
+		for (Hall square: hallList){
+			if(square.getLargeur() > width_mean*1.15 && square.getLongueur() > height_mean*1.15){
+				square.setIsMain(true);
+			}
+		}
+		
 		//delaunay 
-		for (Square square: squareList) {
-			if(square.getIsMain()){
-				Point p = new Point((float) square.getCenterX(), (float) square.getCenterY());
+		for (Hall hall: hallList) {
+			if(hall.getIsMain()){
+				Point p = hall.getPoint();
 				points.add(p);
+				mainHallList.add(hall);
 			}	
 		}
 		
 		
 		triangles = Triangulate.triangulate(points);
 		isTriangulated = true;
+		for (Hall hall: mainHallList) {
+			for (Triangle triangle : triangles) {
+				if(triangle.p1.equals(hall.getPoint())) {
+					hall.neighbors.add(triangle.p2.getHall(mainHallList));
+					hall.neighbors.add(triangle.p3.getHall(mainHallList));
+				}
+				else if (triangle.p2.equals(hall.getPoint())) {
+					hall.neighbors.add(triangle.p1.getHall(mainHallList));
+					hall.neighbors.add(triangle.p3.getHall(mainHallList));
+				}
+				else if (triangle.p3.equals(hall.getPoint())) {
+					hall.neighbors.add(triangle.p1.getHall(mainHallList));
+					hall.neighbors.add(triangle.p2.getHall(mainHallList));
+				}
+			}
+		}
+		LinkedList<Hall> queue = new LinkedList<Hall>();
+		
+		Hall s = mainHallList.get(0);
+		float center =  Float.POSITIVE_INFINITY;
+		for (Hall hall : mainHallList) {
+			float norme = hall.getPoint().getNorme();
+			if(norme <= center) {
+				center = norme;
+				s = hall;
+			}
+		}
+		
+		int edgeNumber = 0;
+		
+		queue.add(s);
+		s.isMarked = true;
+		while(queue.size() != 0) {
+			Hall hall = queue.pop();
+			for (Hall neighbor : hall.neighbors) {
+				if(!neighbor.isMarked){
+					neighbor.isMarked = true;
+					hall.sucessors.add(neighbor);
+					queue.add(neighbor);
+					edgeNumber += 1;
+				}
+				
+			}
+		}
+		int addedEdges = (int) (edgeNumber * 40 / 100);
+		while (addedEdges > 0) {
+			for (Hall hall : mainHallList) {
+				if(hall.getNotLinkedNeighbor() != null && addedEdges > 0){
+					Hall neighbor =  hall.getNotLinkedNeighbor();
+					neighbor.isMarked = true;
+					hall.sucessors.add(neighbor);
+					addedEdges = addedEdges -1;
+				}
+			}
+		}
+		isTriangulated = false;
+		isST = true;
+		
+		
+		for (Hall hall : mainHallList) {
+			for (Hall sucessor : hall.sucessors) {
+				if(!Corridor.getExist(corridorList, hall, sucessor)) {
+					Corridor corridor = new Corridor(hall, sucessor);
+					corridorList.add(corridor);
+				}
+			}
+		}
+		isST = false;
+		isCorridored = true;
+		
+		
 		
 		Gdx.app.debug("Triangulation", "Triangulation faite");
 	}
