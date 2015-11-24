@@ -39,7 +39,7 @@ public class GameScreen implements Screen {
 		
 		batch = new SpriteBatch();
 		camera = new OrthographicCamera();
-		camera.setToOrtho(false, WOLRD_WIDTH/2, WORLD_HEIGHT/2);
+		camera.setToOrtho(false, WOLRD_WIDTH, WORLD_HEIGHT);
 		world = new World(new Vector2(0f, 0f), true);
 		debugRenderer = new Box2DDebugRenderer(true,true,true,true,true,true);
 		
@@ -49,17 +49,17 @@ public class GameScreen implements Screen {
 	
 	private void createPlayerBody(){
 		
-		//je crée la def (position/type...)
+		//je crï¿½e la def (position/type...)
 		BodyDef playerBodyDef = new BodyDef();
 		
 		playerBodyDef.type = BodyDef.BodyType.DynamicBody;
 		
 		playerBodyDef.position.set(WOLRD_WIDTH / 2, WORLD_HEIGHT /2);
 		
-		//je crée mon body dans mon world partant de ma def
+		//je crï¿½e mon body dans mon world partant de ma def
 		playerBody = world.createBody(playerBodyDef);
 		
-		//je crée ma fixture qui fix les carac physiques du body et sa shape
+		//je crï¿½e ma fixture qui fix les carac physiques du body et sa shape
 		FixtureDef firstFixtureDef = new FixtureDef();	
 		firstFixtureDef.density = 1;	
 		firstFixtureDef.restitution = 1.0f;	
@@ -81,14 +81,15 @@ public class GameScreen implements Screen {
 		BodyDef mapPartDef = new BodyDef();
 		
 		mapPartDef.type = BodyDef.BodyType.StaticBody;
-		mapPartDef.position.set(0, 0);
+		mapPartDef.position.set(WORLD_HEIGHT/2, WORLD_HEIGHT/2);
 		
 		Body mapPart = world.createBody(mapPartDef);
 
-		Rectangle rect = new Rectangle(WOLRD_WIDTH, WORLD_HEIGHT, WOLRD_WIDTH, WORLD_HEIGHT);
+		Rectangle rect = new Rectangle(0, 0, 0.4f, 0.4f);
+		
 		Vector2[] vect = vectorTabFromRect(rect);		
 		ChainShape chainShape = new ChainShape();
-		chainShape.createLoop(vect);
+		chainShape.createChain(vect);
 		
 		mapPart.createFixture(chainShape, 0.0f);
 	}
@@ -96,9 +97,9 @@ public class GameScreen implements Screen {
 	private Vector2[] vectorTabFromRect(Rectangle rect){
 		Vector2[] vect = new Vector2[4];
 		vect[0]=new Vector2(rect.x, rect.y);
-		vect[1]=new Vector2(rect.x-rect.width, rect.y);
-		vect[2]=new Vector2(rect.x-rect.width, rect.y-rect.height);
-		vect[3]=new Vector2(rect.x, rect.y-rect.height);
+		vect[1]=new Vector2(rect.x+rect.width, rect.y);
+		vect[2]=new Vector2(rect.x+rect.width, rect.y+rect.height);
+		vect[3]=new Vector2(rect.x, rect.y+rect.height);
 		
 		return vect;
 	}
@@ -132,7 +133,6 @@ public class GameScreen implements Screen {
 		batch.end();
 
 		world.step(1/60f, 6, 2);
-
 	}
 	
 	private void checkControl(){
