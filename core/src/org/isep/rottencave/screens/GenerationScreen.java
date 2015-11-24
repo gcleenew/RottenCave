@@ -19,7 +19,6 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 public class GenerationScreen implements Screen {
 	final Game game;
 	private OrthographicCamera camera;
-	private Texture img;
 	private ShapeRenderer shape;
 	private ProceduralGeneration generation;
 	
@@ -83,7 +82,11 @@ public class GenerationScreen implements Screen {
 		}
 		
 		shape.end();
-		
+		if(generation.getState()==Thread.State.TERMINATED){
+			GameScreen gameScreen = new GameScreen(game);
+			game.setScreen(gameScreen);
+			dispose();
+		}
 		//Gdx.app.debug("FPS", ""+Gdx.graphics.getFramesPerSecond());
 	}
 
@@ -112,8 +115,6 @@ public class GenerationScreen implements Screen {
 
 	@Override
 	public void dispose() {
-		shape.dispose();
-		img.dispose();
 		shape.dispose();
 	}
 

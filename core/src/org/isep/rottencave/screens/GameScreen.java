@@ -9,14 +9,16 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
-import com.badlogic.gdx.physics.box2d.ChainShape;
 import com.badlogic.gdx.physics.box2d.CircleShape;
+import com.badlogic.gdx.physics.box2d.Contact;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
+import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.Array;
 
@@ -33,6 +35,7 @@ public class GameScreen implements Screen {
 	
 	public final static float WOLRD_WIDTH = 6.4f;
 	public final static float WORLD_HEIGHT = 4.0f;
+	private static final float PLAYER_SPEED = 1f;
 	
 	public GameScreen(final Game game) {
 		this.game=game;	
@@ -45,6 +48,12 @@ public class GameScreen implements Screen {
 		
 		createStaticMap();
 		createPlayerBody();
+		
+		//test rectangle
+		Rectangle firstRect = new Rectangle(WORLD_HEIGHT/2, WORLD_HEIGHT/2, 0.4f, 0.4f);
+		Rectangle secondRect = new Rectangle(WORLD_HEIGHT/2+0.4f, WORLD_HEIGHT/2, 0.4f, 0.4f);
+		createStaticMapFromRect(firstRect);
+		createStaticMapFromRect(secondRect);
 	}
 	
 	private void createPlayerBody(){
@@ -87,11 +96,36 @@ public class GameScreen implements Screen {
 
 		Rectangle rect = new Rectangle(0, 0, 0.4f, 0.4f);
 		
-		Vector2[] vect = vectorTabFromRect(rect);		
-		ChainShape chainShape = new ChainShape();
-		chainShape.createChain(vect);
+		Vector2[] vect = vectorTabFromRect(rect);			
 		
-		mapPart.createFixture(chainShape, 0.0f);
+		FixtureDef mapFixtureDef = new FixtureDef();	
+		PolygonShape polyShape = new PolygonShape();
+		polyShape.set(vect);
+		mapFixtureDef.isSensor=true;
+		mapFixtureDef.shape=polyShape;
+		
+		mapPart.createFixture(mapFixtureDef);
+	}
+	
+	private void createStaticMapFromRect(Rectangle rect){
+		BodyDef mapPartDef = new BodyDef();
+		
+		mapPartDef.type = BodyDef.BodyType.StaticBody;
+		mapPartDef.position.set(rect.x, rect.y);
+		
+		Body mapPart = world.createBody(mapPartDef);
+
+		Rectangle rectToShape = new Rectangle(0, 0, rect.width, rect.height);
+		
+		Vector2[] vect = vectorTabFromRect(rectToShape);			
+		
+		FixtureDef mapFixtureDef = new FixtureDef();	
+		PolygonShape polyShape = new PolygonShape();
+		polyShape.set(vect);
+		mapFixtureDef.isSensor=true;
+		mapFixtureDef.shape=polyShape;
+		
+		mapPart.createFixture(mapFixtureDef);
 	}
 	
 	private Vector2[] vectorTabFromRect(Rectangle rect){
@@ -133,6 +167,18 @@ public class GameScreen implements Screen {
 		batch.end();
 
 		world.step(1/60f, 6, 2);
+		
+
+		if(world.getContactList().size!=0){
+			for(Contact contact : world.getContactList()){
+				Body firstBody = contact.getFixtureA().getBody();
+				Body secondBody = contact.getFixtureB().getBody();
+				int i = 0;
+			}
+			System.out.println("CONTACT");
+		}else{
+			System.out.println("nothing");
+		}
 	}
 	
 	private void checkControl(){
@@ -150,7 +196,15 @@ public class GameScreen implements Screen {
 		}else{
 			playerBody.setLinearVelocity(0, playerBody.getLinearVelocity().y);
 		}
-		
+	}
+	
+	private void setMoveAngle(Float radian){
+		if(radian == null){
+			playerBody.setLinearVelocity(0, 0);
+		}else{
+			playerBody.setLinearVelocity(MathUtils.cos(radian) * PLAYER_SPEED,MathUtils.sin(radian) * PLAYER_SPEED);
+		}
+			
 	}
 	
 	@Override
