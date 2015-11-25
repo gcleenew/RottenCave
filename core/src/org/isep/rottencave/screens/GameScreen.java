@@ -1,8 +1,8 @@
 package org.isep.rottencave.screens;
 
+import org.isep.rottencave.RottenCave;
 import org.isep.rottencave.GameEnvironement.Character;
 
-import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.Screen;
@@ -19,10 +19,14 @@ import com.badlogic.gdx.physics.box2d.Contact;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
+import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.scenes.scene2d.ui.Touchpad;
+import com.badlogic.gdx.scenes.scene2d.ui.Touchpad.TouchpadStyle;
 import com.badlogic.gdx.utils.Array;
 
 public class GameScreen implements Screen {
-	final Game game;
+	final RottenCave game;
 
 	private SpriteBatch batch;
 	private OrthographicCamera camera;
@@ -30,12 +34,20 @@ public class GameScreen implements Screen {
 	private Box2DDebugRenderer debugRenderer;
 	private Character playerCharacter;
 	private Array<Body> tmpBodies = new Array<Body>();
+	
+	/**
+	 * Used for touchpad
+	 */
+	private Stage stage;
+	private Touchpad stick;
+	private Skin uiSkin;
 
 	public final static float WOLRD_WIDTH = 6.4f;
 	public final static float WORLD_HEIGHT = 4.0f;
 
-	public GameScreen(final Game game) {
+	public GameScreen(final RottenCave game) {
 		this.game = game;
+		this.uiSkin = game.getUiSkin();
 
 		batch = new SpriteBatch();
 		camera = new OrthographicCamera();
@@ -50,6 +62,8 @@ public class GameScreen implements Screen {
 		Rectangle secondRect = new Rectangle(WORLD_HEIGHT / 2 + 0.4f, WORLD_HEIGHT / 2, 0.4f, 0.4f);
 		createStaticMapFromRect(firstRect);
 		createStaticMapFromRect(secondRect);
+		
+		createTouchpad();
 	}
 
 	private void createStaticMap() {
@@ -103,6 +117,14 @@ public class GameScreen implements Screen {
 
 		return vect;
 	}
+	
+	private void createTouchpad() {
+		stage = new Stage();
+		TouchpadStyle touchpadStyle = new TouchpadStyle(uiSkin.getDrawable("touchpad-background"), uiSkin.getDrawable("touchpad-knob"));
+		stick = new Touchpad(1, touchpadStyle);
+		stick.setBounds(15, 15, 100, 100);
+		stage.addActor(stick);
+	}
 
 	@Override
 	public void render(float delta) {
@@ -114,6 +136,8 @@ public class GameScreen implements Screen {
 		// use this to center camera on player.
 		camera.position.set(playerCharacter.getBody().getPosition(), 0f);
 		camera.update();
+		stage.act(delta);
+		stage.draw();
 
 		batch.setProjectionMatrix(camera.combined);
 
@@ -158,18 +182,22 @@ public class GameScreen implements Screen {
 		} else {
 			playerCharacter.setVelocity(0, playerCharacter.getVelocity().y);
 		}
+		
+		// Touchpad action
+		if (stick.getKnobPercentX() != 0 || stick.getKnobPercentY() != 0){
+			playerCharacter.setVelocity(stick.getKnobPercentX(), stick.getKnobPercentY());
+		}
 	}
 
 	@Override
 	public void show() {
-		// TODO Auto-generated method stub
-
+		// Process input for touchpad
+		Gdx.input.setInputProcessor(stage);
 	}
 
 	@Override
 	public void resize(int width, int height) {
-		// TODO Auto-generated method stub
-
+		stage.getViewport().update(width, height, true);
 	}
 
 	@Override
@@ -195,8 +223,7 @@ public class GameScreen implements Screen {
 		debugRenderer.dispose();
 		batch.dispose();
 		world.dispose();
-		
-
+		stage.dispose();
 	}
 
 }

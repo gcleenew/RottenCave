@@ -5,6 +5,8 @@ import org.isep.rottencave.screens.MainMenuScreen;
 import com.badlogic.gdx.Application;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 
 public class RottenCave extends Game {
@@ -13,9 +15,7 @@ public class RottenCave extends Game {
 	@Override
 	public void create () {
 		Gdx.app.setLogLevel(Application.LOG_DEBUG);
-		
-		uiSkin = new Skin(Gdx.files.internal("uiskin.json"));
-		
+		createSkin();
 		this.setScreen(new MainMenuScreen(this));
 	}
 
@@ -30,6 +30,12 @@ public class RottenCave extends Game {
 		uiSkin.dispose();
 	}
 
+	private void createSkin() {
+		uiSkin = new Skin(Gdx.files.internal("uiskin.json"));
+		uiSkin.add("touchpad-background", new Texture("scene2d/stick-background.png"));
+		uiSkin.add("touchpad-knob", new Texture("scene2d/stick-knob.png"));
+	}
+	
 	public Skin getUiSkin() {
 		return uiSkin;
 	}

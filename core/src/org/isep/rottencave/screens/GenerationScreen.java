@@ -1,9 +1,10 @@
 package org.isep.rottencave.screens;
 
+import org.isep.rottencave.RottenCave;
 import org.isep.rottencave.generation.Corridor;
+import org.isep.rottencave.generation.Hall;
 import org.isep.rottencave.generation.Point;
 import org.isep.rottencave.generation.ProceduralGeneration;
-import org.isep.rottencave.generation.Hall;
 import org.isep.rottencave.generation.Triangle;
 
 import com.badlogic.gdx.Game;
@@ -12,17 +13,16 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 
 public class GenerationScreen implements Screen {
-	final Game game;
+	final RottenCave game;
 	private OrthographicCamera camera;
 	private ShapeRenderer shape;
 	private ProceduralGeneration generation;
 	
-	public GenerationScreen(final Game game) {
+	public GenerationScreen(final RottenCave game) {
 		this.game=game;
 		
 		camera = new OrthographicCamera();
