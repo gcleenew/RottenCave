@@ -33,6 +33,7 @@ public class GameScreen implements Screen {
 	private World world;
 	private Box2DDebugRenderer debugRenderer;
 	private Character playerCharacter;
+	private Character monsterCharacter;
 	private Array<Body> tmpBodies = new Array<Body>();
 	
 	/**
@@ -55,8 +56,8 @@ public class GameScreen implements Screen {
 		world = new World(new Vector2(0f, 0f), true);
 		debugRenderer = new Box2DDebugRenderer(true, true, true, true, true, true);
 
-		playerCharacter = new Character(world, WOLRD_WIDTH / 2, WORLD_HEIGHT / 2);
-
+		playerCharacter = new Character(world, WOLRD_WIDTH / 2, WORLD_HEIGHT / 2, true);
+		monsterCharacter = new Character(world, WOLRD_WIDTH / 2, WORLD_HEIGHT / 2, false);
 		// test rectangle
 		Rectangle firstRect = new Rectangle(WORLD_HEIGHT / 2, WORLD_HEIGHT / 2, 0.4f, 0.4f);
 		Rectangle secondRect = new Rectangle(WORLD_HEIGHT / 2 + 0.4f, WORLD_HEIGHT / 2, 0.4f, 0.4f);
@@ -81,7 +82,7 @@ public class GameScreen implements Screen {
 		FixtureDef mapFixtureDef = new FixtureDef();
 		PolygonShape polyShape = new PolygonShape();
 		polyShape.set(vect);
-		mapFixtureDef.isSensor = true;
+		mapFixtureDef.isSensor = false;
 		mapFixtureDef.shape = polyShape;
 
 		mapPart.createFixture(mapFixtureDef);
@@ -102,7 +103,7 @@ public class GameScreen implements Screen {
 		FixtureDef mapFixtureDef = new FixtureDef();
 		PolygonShape polyShape = new PolygonShape();
 		polyShape.set(vect);
-		mapFixtureDef.isSensor = true;
+		mapFixtureDef.isSensor = false;
 		mapFixtureDef.shape = polyShape;
 
 		mapPart.createFixture(mapFixtureDef);
@@ -154,19 +155,21 @@ public class GameScreen implements Screen {
 		batch.end();
 
 		checkControl();
+		monsterStep();
 		world.step(1 / 60f, 6, 2);
-
-		if (world.getContactList().size != 0) {
-			for (Contact contact : world.getContactList()) {
-				Body firstBody = contact.getFixtureA().getBody();
-				Body secondBody = contact.getFixtureB().getBody();
-			}
-			System.out.println("CONTACT");
-		} else {
-			System.out.println("nothing");
-		}
 	}
 
+	private void monsterStep(){
+		Vector2 monsterPos = monsterCharacter.getBody().getPosition();
+		Vector2 playerPos = playerCharacter.getBody().getPosition();
+
+		double theta = Math.atan2(playerPos.y - monsterPos.y, playerPos.x - monsterPos.x);
+		if (theta < 0) {
+			theta += Math.PI * 2;
+		}
+		monsterCharacter.setMoveAngle((float) theta);
+	}
+	
 	private void checkControl() {
 		if (Gdx.input.isKeyPressed(Keys.UP)) {
 			playerCharacter.setVelocity(playerCharacter.getVelocity().x, 1f);

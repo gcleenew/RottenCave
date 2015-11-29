@@ -21,9 +21,14 @@ public class Character {
 	private float starterX;
 	private float starterY;
 
-	public Character(World world, float f, float g) {
+	public Character(World world, float f, float g, Boolean isPlayer) {
 		this.world = world;
-		this.speed = 2f;
+		this.player = isPlayer;
+		if(player){
+			this.speed = 1f;
+		}else{
+			this.speed = 0.5f;
+		}
 		this.starterX = f;
 		this.starterY = g;
 		createPlayerBody();
@@ -53,11 +58,14 @@ public class Character {
 	}
 
 	private void associateSpriteToBody() {
+		Sprite sprite =null;
 		if (isPlayer()) {
-			Sprite sprite = new Sprite(new Texture(Gdx.files.internal("img/playerSprite.png")));
-			body.setUserData(sprite);
-			sprite.setSize(0.2f, 0.2f);
+			sprite = new Sprite(new Texture(Gdx.files.internal("img/playerSprite.png")));
+		}else{
+			sprite = new Sprite(new Texture(Gdx.files.internal("img/monsterSprite.png")));
 		}
+		body.setUserData(sprite);
+		sprite.setSize(0.2f, 0.2f);
 	}
 
 	public void setVelocity(float vX, float vY){
@@ -68,11 +76,11 @@ public class Character {
 		return this.body.getLinearVelocity();
 	}
 	
-	private void setMoveAngle(Float radian) {
+	public void setMoveAngle(Float radian) {
 		if (radian == null) {
 			body.setLinearVelocity(0, 0);
 		} else {
-			body.setLinearVelocity(MathUtils.cos(radian) * speed, MathUtils.sin(radian) * speed);
+			body.setLinearVelocity(MathUtils.cos(radian) * this.speed, MathUtils.sin(radian) * this.speed);
 		}
 	}
 
