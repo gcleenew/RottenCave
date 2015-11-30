@@ -5,14 +5,15 @@ import org.isep.rottencave.GlobalConfiguration;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Net.HttpMethods;
 import com.badlogic.gdx.Net.HttpRequest;
+import com.badlogic.gdx.Net.HttpResponseListener;
 import com.badlogic.gdx.net.HttpRequestBuilder;
 
 /**
  * Singleton
  * @author ROSSATO Pierre
- *
  */
 public class ScoreRestClient {
+	private static final String URL_BASE = GlobalConfiguration.REST_URL_BASE + "json/scores/";
 	public static ScoreRestClient scoreRestClient;
 	
 	private HttpRequestBuilder requestBuilder;
@@ -21,10 +22,15 @@ public class ScoreRestClient {
 		requestBuilder = new HttpRequestBuilder();
 	}
 	
-	public void getScoreById(int id) {
-		String url = GlobalConfiguration.REST_URL_BASE + "json/scores/get/" + id;
+	public void getScoreById(HttpResponseListener responseListener, int id) {
+		String url = URL_BASE + "get/" + id;
 		HttpRequest request = requestBuilder.newRequest().method(HttpMethods.GET).url(url).build();
-		ScoreResponseListener responseListener = new ScoreResponseListener();
+		Gdx.net.sendHttpRequest(request, responseListener);
+	}
+	
+	public void getScoresList(HttpResponseListener responseListener) {
+		String url = URL_BASE + "list";
+		HttpRequest request = requestBuilder.newRequest().method(HttpMethods.GET).url(url).build();
 		Gdx.net.sendHttpRequest(request, responseListener);
 	}
 	
