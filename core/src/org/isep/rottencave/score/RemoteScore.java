@@ -1,5 +1,9 @@
 package org.isep.rottencave.score;
 
+import java.util.Date;
+
+import org.isep.rottencave.GlobalConfiguration;
+
 /**
  * Match score coming from the server
  * @author ROSSATO Pierre
@@ -8,11 +12,13 @@ package org.isep.rottencave.score;
 public class RemoteScore {
 	private int id;
 	private int score;
-	private String playDate;
+	/**
+	 * Saved as timestamp
+	 */
+	private Long playDate;
 	private String playerName;
 	
 	public RemoteScore() {
-		
 	}
 	
 	public int getId() {
@@ -27,11 +33,11 @@ public class RemoteScore {
 	public void setScore(int score) {
 		this.score = score;
 	}
-	public String getDate() {
+	public Long getPlayDate() {
 		return playDate;
 	}
-	public void setDate(String date) {
-		this.playDate = date;
+	public void setPlayDate(Long playDate) {
+		this.playDate = playDate;
 	}
 	public String getPlayerName() {
 		return playerName;
@@ -40,5 +46,10 @@ public class RemoteScore {
 		this.playerName = playerName;
 	}
 	
-	
+	/**
+	 * Get formated date
+	 */
+	public String getFormatedPlayDate() {
+		return GlobalConfiguration.MEDIUM_DATE_FORMAT.format(new Date(playDate));
+	}
 }

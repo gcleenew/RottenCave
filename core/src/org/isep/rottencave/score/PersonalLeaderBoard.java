@@ -29,7 +29,7 @@ public class PersonalLeaderBoard {
 		container.top();
 		scoreTable = new Table();
 		
-		Label leaderBoard = new Label("LEADERBOARD", uiSkin, "title");
+		Label leaderBoard = new Label("SCORES", uiSkin, "title");
 		Label returnLabel = new Label("Menu", uiSkin);
 		returnLabel.addListener(new ButtonRedirectListener(game, new MainMenuScreen(game)));
 		Label date = new Label("DATE", uiSkin);

@@ -1,33 +1,51 @@
 package org.isep.rottencave.score;
 
+import org.isep.rottencave.RottenCave;
+import org.isep.rottencave.scene2d.ButtonRedirectListener;
+import org.isep.rottencave.screens.MainMenuScreen;
+
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 
 /**
- * TODO Connection with web services
+ * 
  * @author ROSSATO Pierre
  *
  */
 public class BasicLeaderboard {
+
+	private RottenCave game;
 	private Table container;
 	private Table scoreTable;
 	private Skin uiSkin;
 	
-	public BasicLeaderboard(Skin skin) {
-		this.uiSkin = skin;
+	public BasicLeaderboard(final RottenCave game) {
+		this.game = game;
+		this.uiSkin = game.getUiSkin();
 		createStaticContent();
 	}
 	
 	private void createStaticContent() {
 		container = new Table();
-		container.setDebug(true);
 		container.setFillParent(true);
 		container.top();
 		scoreTable = new Table();
 		scoreTable.debug();
 		
 		Label leaderBoard = new Label("LEADERBOARD", uiSkin, "title");
+		Label returnLabel = new Label("Menu", uiSkin);
+		returnLabel.addListener(new ButtonRedirectListener(game, new MainMenuScreen(game)));
+		resetScoreTable();
+		container.add(leaderBoard).expandX();
+		container.row().padTop(15);
+		container.add(scoreTable).expand().fillX().top();
+		container.row();
+		container.add(returnLabel).bottom().left().pad(10);
+	}
+	
+	private void resetScoreTable() {
+		scoreTable.reset();
 		Label rang = new Label("RANG", uiSkin);
 		Label joueur = new Label("JOUEUR", uiSkin);
 		Label date = new Label("DATE", uiSkin);
@@ -38,10 +56,11 @@ public class BasicLeaderboard {
 		scoreTable.add(date).expandX();
 		scoreTable.add(score).expandX();
 		scoreTable.add(seed).expandX();
-		
-		container.add(leaderBoard).expandX();
-		container.row().padTop(15);
-		container.add(scoreTable).expand().fillX().top();
+	}
+
+	public Table cleanScoreTable() {
+		resetScoreTable();
+		return scoreTable;
 	}
 
 	public Table getContainer() {

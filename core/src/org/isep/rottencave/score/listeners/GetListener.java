@@ -19,7 +19,7 @@ public class GetListener extends JsonListener {
 		
 		Gdx.app.debug("Score response", result);
 		Gdx.app.debug("Remote score got", 
-				"Date : " + rs.getDate() + 
+				"Date : " + rs.getPlayDate() + 
 				" / Player name : " + rs.getPlayerName() +
 				" / Score : " + rs.getScore());
 	}

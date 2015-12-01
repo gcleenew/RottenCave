@@ -11,7 +11,7 @@ import com.badlogic.gdx.Net.HttpResponse;
 import com.badlogic.gdx.utils.JsonValue;
 
 /**
- * Listener that execute his ScoreListProcessor process function
+ * Listener that execute his ScoreListProcessor process function on the list received
  * @author prossato
  *
  */
