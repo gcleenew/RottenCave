@@ -5,10 +5,15 @@ import com.badlogic.gdx.Net.HttpResponse;
 import com.badlogic.gdx.Net.HttpResponseListener;
 import com.badlogic.gdx.utils.Json;
 
-public class ScoreListener implements HttpResponseListener {
+/**
+ * Use only for debug purpose or extends
+ * @author prossato
+ *
+ */
+public class JsonListener implements HttpResponseListener {
 	protected Json json;
 	
-	public ScoreListener() {
+	public JsonListener() {
 		json = new Json();
 	}
 	

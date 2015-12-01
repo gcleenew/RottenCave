@@ -5,7 +5,7 @@ import org.isep.rottencave.score.RemoteScore;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Net.HttpResponse;
 
-public class GetListener extends ScoreListener {
+public class GetListener extends JsonListener {
 	private RemoteScore rs;
 	
 	public GetListener() {
