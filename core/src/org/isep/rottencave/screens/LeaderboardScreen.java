@@ -15,6 +15,10 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 
+/**
+ * @author ROSSATO Pierre
+ *
+ */
 public class LeaderboardScreen implements Screen {
 	private final RottenCave game;
 	private Stage stage;
@@ -75,5 +79,6 @@ public class LeaderboardScreen implements Screen {
 	@Override
 	public void dispose() {
 		stage.dispose();
+		leaderBoard = null;
 	}
 }
