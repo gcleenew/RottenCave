@@ -47,22 +47,14 @@ public class FillTableProcessor implements ScoreListProcessor {
 			Gdx.app.postRunnable(new Runnable() {
 				@Override
 				public void run() {
-					Label rang, playerName, formatedDate, score, seed;
-
 					int rangIncremeter = 1;
 					for (RemoteScore remoteScore : scoresList) {
-						rang = new Label("" + rangIncremeter++, skin);
-						playerName = new Label(remoteScore.getPlayerName(), skin);
-						formatedDate = new Label(remoteScore.getFormatedPlayDate(), skin);
-						score = new Label("" + remoteScore.getScore(), skin);
-						seed = new Label("1", skin);
-
 						scoreTable.row();
-						scoreTable.add(new Container<Label>(rang));
-						scoreTable.add(new Container<Label>(playerName));
-						scoreTable.add(new Container<Label>(formatedDate));
-						scoreTable.add(new Container<Label>(score));
-						scoreTable.add(new Container<Label>(seed));
+						scoreTable.add(new Container<Label>(new Label("" + rangIncremeter++, skin)));
+						scoreTable.add(new Container<Label>(new Label(remoteScore.getPlayerName(), skin)));
+						scoreTable.add(new Container<Label>(new Label(remoteScore.getFormatedPlayDate(), skin)));
+						scoreTable.add(new Container<Label>(new Label("" + remoteScore.getScore(), skin)));
+						scoreTable.add(new Container<Label>(new Label("" + remoteScore.getSeed(), skin)));
 					}
 				}
 			});

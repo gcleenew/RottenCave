@@ -17,6 +17,7 @@ public class RemoteScore implements Comparable<RemoteScore> {
 	 */
 	private Long playDate;
 	private String playerName;
+	private int seed;
 	
 	public RemoteScore() {
 	}
@@ -44,6 +45,12 @@ public class RemoteScore implements Comparable<RemoteScore> {
 	}
 	public void setPlayerName(String playerName) {
 		this.playerName = playerName;
+	}
+	public int getSeed() {
+		return seed;
+	}
+	public void setSeed(int seed) {
+		this.seed = seed;
 	}
 	
 	/**
