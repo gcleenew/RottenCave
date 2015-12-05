@@ -1,8 +1,8 @@
 package org.isep.rottencave.score.processors;
 
+import java.util.Collections;
 import java.util.List;
 
-import org.isep.rottencave.RottenCave;
 import org.isep.rottencave.score.RemoteScore;
 
 import com.badlogic.gdx.Gdx;
@@ -31,6 +31,10 @@ public class FillTableProcessor implements ScoreListProcessor {
 		Gdx.app.debug("FillTableProcessor", "Begin process");
 		if (scoresList.size() > 1){
 			
+			// Sort remote score list
+			Gdx.app.debug("FillTableProcessor", "Sort collection");
+			Collections.sort(scoresList);
+			
 			// Post runnable to synchronize update with rendering
 			Gdx.app.debug("FillTableProcessor", "Send postRunnable");
 			Gdx.app.postRunnable(new Runnable() {
@@ -53,16 +57,6 @@ public class FillTableProcessor implements ScoreListProcessor {
 						scoreTable.add(new Container<Label>(score));
 						scoreTable.add(new Container<Label>(seed));
 					}
-				}
-			});
-		} else {
-			
-			Gdx.app.postRunnable(new Runnable() {
-				@Override
-				public void run() {
-//					Dialog dialog = new Dialog("Server error", skin);
-//					scoreTable.row();
-//					scoreTable.add(dialog);
 				}
 			});
 		}

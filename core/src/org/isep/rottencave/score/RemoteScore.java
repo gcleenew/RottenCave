@@ -9,7 +9,7 @@ import org.isep.rottencave.GlobalConfiguration;
  * @author ROSSATO Pierre
  *
  */
-public class RemoteScore {
+public class RemoteScore implements Comparable<RemoteScore> {
 	private int id;
 	private int score;
 	/**
@@ -51,5 +51,14 @@ public class RemoteScore {
 	 */
 	public String getFormatedPlayDate() {
 		return GlobalConfiguration.MEDIUM_DATE_FORMAT.format(new Date(playDate));
+	}
+	
+	@Override
+	public int compareTo(RemoteScore o) {
+		if (score >= o.getScore()){
+			return -1;
+		} else {
+			return 1;
+		}
 	}
 }
