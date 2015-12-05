@@ -1,6 +1,7 @@
 package org.isep.rottencave.score.processors;
 
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 import org.isep.rottencave.score.RemoteScore;
@@ -33,7 +34,13 @@ public class FillTableProcessor implements ScoreListProcessor {
 			
 			// Sort remote score list
 			Gdx.app.debug("FillTableProcessor", "Sort collection");
-			Collections.sort(scoresList);
+			// Use comparator to sort with descending order
+			Collections.sort(scoresList, new Comparator<RemoteScore>() {
+				@Override
+				public int compare(RemoteScore o1, RemoteScore o2) {
+					return o2.compareTo(o1);
+				};
+			});
 			
 			// Post runnable to synchronize update with rendering
 			Gdx.app.debug("FillTableProcessor", "Send postRunnable");

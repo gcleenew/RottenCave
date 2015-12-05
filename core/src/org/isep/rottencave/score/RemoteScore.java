@@ -55,10 +55,6 @@ public class RemoteScore implements Comparable<RemoteScore> {
 	
 	@Override
 	public int compareTo(RemoteScore o) {
-		if (score >= o.getScore()){
-			return -1;
-		} else {
-			return 1;
-		}
+		return score - o.getScore();
 	}
 }
