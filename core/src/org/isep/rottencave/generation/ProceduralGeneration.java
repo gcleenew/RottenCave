@@ -38,14 +38,14 @@ public class ProceduralGeneration extends Thread{
 		points = new ArrayList<Point>();
 		triangles = new ArrayList<Triangle>();
 		corridorList = new ArrayList<Corridor>();
-		Random randomGenerator = new Random();
+		Random randomGenerator = new Random(1000L);
 		double height_sum = 0;
 		double width_sum = 0;
 		for(int i = 0; i < NUM_ELEMENT; i++){
 			int randomX = randomGenerator.nextInt(60*TILE_SIZE);
 			int randomY = randomGenerator.nextInt(60*TILE_SIZE);
 			Point point = new Point(0, 0);
-			point.setRandomPositionInCircle(75*TILE_SIZE);
+			point.setRandomPositionInCircle(75*TILE_SIZE, randomGenerator);
 			point.x += 350*TILE_SIZE;
 			point.y += 250*TILE_SIZE;
 			int largeur = (randomX + 7)*TILE_SIZE;
