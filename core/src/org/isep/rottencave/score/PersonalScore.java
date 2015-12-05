@@ -4,7 +4,7 @@ import java.util.Date;
 
 import org.isep.rottencave.GlobalConfiguration;
 
-public class PersonalScore {
+public class PersonalScore implements Comparable<PersonalScore> {
 	private String date;
 	private int score;
 	private int seed;
@@ -48,5 +48,10 @@ public class PersonalScore {
 
 	public void setSeed(int seed) {
 		this.seed = seed;
+	}
+
+	@Override
+	public int compareTo(PersonalScore o) {
+		return score - o.getScore();
 	}
 }
