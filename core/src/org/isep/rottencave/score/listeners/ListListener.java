@@ -8,6 +8,8 @@ import org.isep.rottencave.score.processors.ScoreListProcessor;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Net.HttpResponse;
+import com.badlogic.gdx.net.HttpStatus;
+import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.JsonValue;
 
 /**
@@ -25,24 +27,41 @@ public class ListListener extends JsonListener {
 		this.processor = processor;
 	}
 	
+	public ListListener(ScoreListProcessor processor, Stage stage) {
+		super(stage);
+		remoteScores = new LinkedList<RemoteScore>();
+		this.processor = processor;
+	}
 	
 	@Override
 	public void handleHttpResponse(HttpResponse httpResponse) {
-		Gdx.app.debug("Score response", "ScoresList recieved !");
+		HttpStatus status = httpResponse.getStatus();
 		
-		String result = httpResponse.getResultAsString();
-		@SuppressWarnings("unchecked")
-		LinkedList<JsonValue> list = json.fromJson(LinkedList.class, result);
-		
-		for (JsonValue jsonValue : list) {
-			remoteScores.add(json.readValue(RemoteScore.class, jsonValue));
+		if (status.getStatusCode() >= 200 && status.getStatusCode() < 300) {
+			String result = httpResponse.getResultAsString();
+			
+			Gdx.app.debug("Score response", "ScoresList recieved !");
+			Gdx.app.debug("Score response", result);
+			
+			@SuppressWarnings("unchecked")
+			LinkedList<JsonValue> list = json.fromJson(LinkedList.class, result);
+			
+			if (list != null) {
+				for (JsonValue jsonValue : list) {
+					remoteScores.add(json.readValue(RemoteScore.class, jsonValue));
+				}
+				
+				Gdx.app.debug("Remote list size", ""+remoteScores.size());
+			} else {
+				Gdx.app.debug("Score response", "No data to process !");
+			}
+			
+			Gdx.app.debug("Score response", "Process data");
+			processor.processList(remoteScores);
+		} else {
+			Gdx.app.debug("Score response", "http error, code : "+status.getStatusCode());
+			showDialog();
 		}
-		
-		Gdx.app.debug("Score response", result);
-		Gdx.app.debug("Remote list size", ""+remoteScores.size());
-		
-		Gdx.app.debug("Score response", "Process data");
-		processor.processList(remoteScores);
 	}
 
 	public List<RemoteScore> getRemoteScores() {

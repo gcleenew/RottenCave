@@ -17,7 +17,7 @@ public class PersonalRankScreen implements Screen {
 	
 	public PersonalRankScreen(final RottenCave game) {
 		this.game = game;
-		this.uiSkin = game.getUiSkin();
+		this.uiSkin = RottenCave.getUiSkin();
 	}
 	
 	@Override

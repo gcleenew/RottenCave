@@ -27,7 +27,7 @@ public class BasicLeaderboard {
 	
 	public BasicLeaderboard(final RottenCave game) {
 		this.game = game;
-		this.uiSkin = game.getUiSkin();
+		this.uiSkin = RottenCave.getUiSkin();
 		createStaticContent();
 	}
 	

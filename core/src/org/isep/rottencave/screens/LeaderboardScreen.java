@@ -1,6 +1,7 @@
 package org.isep.rottencave.screens;
 
 import org.isep.rottencave.RottenCave;
+import org.isep.rottencave.scene2d.SimpleDialogMessage;
 import org.isep.rottencave.score.BasicLeaderboard;
 import org.isep.rottencave.score.ScoreRestClient;
 import org.isep.rottencave.score.listeners.ListListener;
@@ -10,7 +11,9 @@ import org.isep.rottencave.score.processors.ScoreListProcessor;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Dialog;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
@@ -22,12 +25,10 @@ import com.badlogic.gdx.utils.viewport.ScreenViewport;
 public class LeaderboardScreen implements Screen {
 	private final RottenCave game;
 	private Stage stage;
-	private Skin uiSkin;
 	private BasicLeaderboard leaderBoard;
 	
 	public LeaderboardScreen(final RottenCave game) {
 		this.game = game;
-		this.uiSkin = game.getUiSkin();
 
 		stage = new Stage(new ScreenViewport());
 		leaderBoard = new BasicLeaderboard(game);
@@ -37,8 +38,8 @@ public class LeaderboardScreen implements Screen {
 	private void refreshLeaderboard () {
 		Table scoreTable = leaderBoard.cleanScoreTable();
 		ScoreRestClient client = ScoreRestClient.getScoreRestClient();
-		ScoreListProcessor processor = new FillTableProcessor(scoreTable, uiSkin);
-		ListListener listListener = new ListListener(processor);
+		ScoreListProcessor processor = new FillTableProcessor(scoreTable, RottenCave.getUiSkin());
+		ListListener listListener = new ListListener(processor, stage);
 		client.getScoresList(listListener);
 	}
 	
@@ -59,6 +60,13 @@ public class LeaderboardScreen implements Screen {
 	@Override
 	public void resize(int width, int height) {
 		stage.getViewport().update(width, height, true);
+		
+		// Resize dialog if exist
+		for (Actor actor : stage.getActors()) {
+			if (actor.getClass() == Dialog.class) {
+				SimpleDialogMessage.centerDialog((Dialog) actor);
+			}
+		}
 	}
 
 	@Override

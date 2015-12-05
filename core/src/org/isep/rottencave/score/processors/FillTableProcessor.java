@@ -2,6 +2,7 @@ package org.isep.rottencave.score.processors;
 
 import java.util.List;
 
+import org.isep.rottencave.RottenCave;
 import org.isep.rottencave.score.RemoteScore;
 
 import com.badlogic.gdx.Gdx;
@@ -52,6 +53,16 @@ public class FillTableProcessor implements ScoreListProcessor {
 						scoreTable.add(new Container<Label>(score));
 						scoreTable.add(new Container<Label>(seed));
 					}
+				}
+			});
+		} else {
+			
+			Gdx.app.postRunnable(new Runnable() {
+				@Override
+				public void run() {
+//					Dialog dialog = new Dialog("Server error", skin);
+//					scoreTable.row();
+//					scoreTable.add(dialog);
 				}
 			});
 		}

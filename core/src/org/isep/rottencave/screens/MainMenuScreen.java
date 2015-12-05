@@ -21,7 +21,7 @@ public class MainMenuScreen implements Screen {
 	
 	public MainMenuScreen(final RottenCave game) {
 		this.game= game;
-		this.uiSkin = game.getUiSkin();
+		this.uiSkin = RottenCave.getUiSkin();
 	}
 
 	@Override
