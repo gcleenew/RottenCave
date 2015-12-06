@@ -10,11 +10,11 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 
 public class RottenCave extends Game {
-	private Skin uiSkin;
+	private static Skin uiSkin;
 	
 	@Override
 	public void create () {
-		Gdx.app.setLogLevel(Application.LOG_DEBUG);
+		Gdx.app.setLogLevel(Application.LOG_DEBUG);	
 		createSkin();
 		this.setScreen(new MainMenuScreen(this));
 	}
@@ -29,14 +29,14 @@ public class RottenCave extends Game {
 		super.dispose();
 		uiSkin.dispose();
 	}
-
+	
 	private void createSkin() {
 		uiSkin = new Skin(Gdx.files.internal("uiskin.json"));
 		uiSkin.add("touchpad-background", new Texture("scene2d/stick-background.png"));
 		uiSkin.add("touchpad-knob", new Texture("scene2d/stick-knob.png"));
 	}
-	
-	public Skin getUiSkin() {
+
+	public static Skin getUiSkin() {
 		return uiSkin;
 	}
 }

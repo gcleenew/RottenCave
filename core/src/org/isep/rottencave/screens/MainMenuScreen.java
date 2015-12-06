@@ -21,7 +21,7 @@ public class MainMenuScreen implements Screen {
 	
 	public MainMenuScreen(final RottenCave game) {
 		this.game= game;
-		this.uiSkin = game.getUiSkin();
+		this.uiSkin = RottenCave.getUiSkin();
 	}
 
 	@Override
@@ -74,8 +74,10 @@ public class MainMenuScreen implements Screen {
 		Label rottenCave = new Label("Rotten Cave", uiSkin, "title");
 		TextButton jouer = new TextButton("JOUER", uiSkin);
 		jouer.addListener(new ButtonRedirectListener(game, new GenerationScreen(game)));
-		TextButton scores = new TextButton("SCORES", uiSkin);
-		scores.addListener(new ButtonRedirectListener(game, new PersonalRankScreen(game)));
+		TextButton personalScores = new TextButton("SCORES", uiSkin);
+		personalScores.addListener(new ButtonRedirectListener(game, new PersonalRankScreen(game)));
+		TextButton leaderboard = new TextButton("LEADERBOARD", uiSkin);
+		leaderboard.addListener(new ButtonRedirectListener(game, new LeaderboardScreen(game)));
 		TextButton config = new TextButton("CONFIGURATION", uiSkin);
 		Label version = new Label ("Version "+ GlobalConfiguration.VERSION, uiSkin);
 		
@@ -83,7 +85,9 @@ public class MainMenuScreen implements Screen {
 		buttonContainer.defaults().pad(10);
 		buttonContainer.add(jouer);
 		buttonContainer.row();
-		buttonContainer.add(scores);
+		buttonContainer.add(personalScores);
+		buttonContainer.row();
+		buttonContainer.add(leaderboard);
 		buttonContainer.row();
 		buttonContainer.add(config);
 		

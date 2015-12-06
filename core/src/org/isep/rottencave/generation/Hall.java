@@ -13,7 +13,10 @@ public class Hall {
 	
 	private boolean isMain;
 	
+	private boolean isCorridor;
+	
 	public boolean isMarked = false;
+	public boolean isActive = false;
 	
 	public ArrayList<Hall> neighbors;
 	public ArrayList<Hall> sucessors;
@@ -60,6 +63,14 @@ public class Hall {
 	
 	public void setIsMain(boolean isMain) {
 		this.isMain = isMain;
+	}
+	
+	public boolean isCorridor() {
+		return isCorridor;
+	}
+
+	public void setCorridor(boolean isCorridor) {
+		this.isCorridor = isCorridor;
 	}
 	
 	public boolean markedNeighbors(){
@@ -151,4 +162,6 @@ public class Hall {
 		this.centre.x += vX;
 		this.centre.y += vY;
 	}
+
+	
 }
