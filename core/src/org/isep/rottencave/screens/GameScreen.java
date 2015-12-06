@@ -1,6 +1,7 @@
 package org.isep.rottencave.screens;
 
 import org.isep.rottencave.RottenCave;
+import org.isep.rottencave.GameEnvironement.BlockMap;
 import org.isep.rottencave.GameEnvironement.Character;
 
 import com.badlogic.gdx.Gdx;
@@ -14,6 +15,7 @@ import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
+import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.physics.box2d.Contact;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
@@ -58,65 +60,11 @@ public class GameScreen implements Screen {
 
 		playerCharacter = new Character(world, WOLRD_WIDTH / 2, WORLD_HEIGHT / 2, true);
 		monsterCharacter = new Character(world, WOLRD_WIDTH / 2, WORLD_HEIGHT / 2, false);
-		// test rectangle
-		Rectangle firstRect = new Rectangle(WORLD_HEIGHT / 2, WORLD_HEIGHT / 2, 0.4f, 0.4f);
-		Rectangle secondRect = new Rectangle(WORLD_HEIGHT / 2 + 0.4f, WORLD_HEIGHT / 2, 0.4f, 0.4f);
-		createStaticMapFromRect(firstRect);
-		createStaticMapFromRect(secondRect);
 		
+		new BlockMap(world, 1, 1, true);
+		new BlockMap(world, 2, 1, false);
+
 		createTouchpad();
-	}
-
-	private void createStaticMap() {
-		BodyDef mapPartDef = new BodyDef();
-
-		mapPartDef.type = BodyDef.BodyType.StaticBody;
-		mapPartDef.position.set(WORLD_HEIGHT / 2, WORLD_HEIGHT / 2);
-
-		Body mapPart = world.createBody(mapPartDef);
-
-		Rectangle rect = new Rectangle(0, 0, 0.4f, 0.4f);
-
-		Vector2[] vect = vectorTabFromRect(rect);
-
-		FixtureDef mapFixtureDef = new FixtureDef();
-		PolygonShape polyShape = new PolygonShape();
-		polyShape.set(vect);
-		mapFixtureDef.isSensor = false;
-		mapFixtureDef.shape = polyShape;
-
-		mapPart.createFixture(mapFixtureDef);
-	}
-
-	private void createStaticMapFromRect(Rectangle rect) {
-		BodyDef mapPartDef = new BodyDef();
-
-		mapPartDef.type = BodyDef.BodyType.StaticBody;
-		mapPartDef.position.set(rect.x, rect.y);
-
-		Body mapPart = world.createBody(mapPartDef);
-
-		Rectangle rectToShape = new Rectangle(0, 0, rect.width, rect.height);
-
-		Vector2[] vect = vectorTabFromRect(rectToShape);
-
-		FixtureDef mapFixtureDef = new FixtureDef();
-		PolygonShape polyShape = new PolygonShape();
-		polyShape.set(vect);
-		mapFixtureDef.isSensor = false;
-		mapFixtureDef.shape = polyShape;
-
-		mapPart.createFixture(mapFixtureDef);
-	}
-
-	private Vector2[] vectorTabFromRect(Rectangle rect) {
-		Vector2[] vect = new Vector2[4];
-		vect[0] = new Vector2(rect.x, rect.y);
-		vect[1] = new Vector2(rect.x + rect.width, rect.y);
-		vect[2] = new Vector2(rect.x + rect.width, rect.y + rect.height);
-		vect[3] = new Vector2(rect.x, rect.y + rect.height);
-
-		return vect;
 	}
 	
 	private void createTouchpad() {
@@ -147,8 +95,12 @@ public class GameScreen implements Screen {
 		for (Body curBody : tmpBodies) {
 			if (curBody.getUserData() != null && curBody.getUserData() instanceof Sprite) {
 				Sprite sprite = (Sprite) curBody.getUserData();
-				sprite.setPosition(curBody.getPosition().x - sprite.getWidth() / 2,
-						curBody.getPosition().y - sprite.getHeight() / 2);
+				if(curBody.getType()==BodyType.StaticBody){
+				sprite.setPosition(curBody.getPosition().x, curBody.getPosition().y);
+				}else{
+					sprite.setPosition(curBody.getPosition().x - sprite.getWidth() / 2,
+							curBody.getPosition().y - sprite.getHeight() / 2);
+				}
 				sprite.draw(batch);
 			}
 		}

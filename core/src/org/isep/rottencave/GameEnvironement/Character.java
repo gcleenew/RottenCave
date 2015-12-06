@@ -37,24 +37,24 @@ public class Character {
 
 	private void createPlayerBody() {
 		// je cree la def (position/type...)
-		BodyDef playerBodyDef = new BodyDef();
-		playerBodyDef.type = BodyDef.BodyType.DynamicBody;
-		playerBodyDef.position.set(starterX, starterY);
+		BodyDef characterBodyDef = new BodyDef();
+		characterBodyDef.type = BodyDef.BodyType.DynamicBody;
+		characterBodyDef.position.set(starterX, starterY);
 
 		// je cree ma fixture qui fix les carac physiques du body et sa shape
-		FixtureDef firstFixtureDef = new FixtureDef();
-		firstFixtureDef.density = 1;
-		firstFixtureDef.restitution = 1.0f;
-		firstFixtureDef.friction = 0.5f;
+		FixtureDef characterFixtureDef = new FixtureDef();
+		characterFixtureDef.density = 1;
+		characterFixtureDef.restitution = 1.0f;
+		characterFixtureDef.friction = 0.5f;
 
 		// je cree mon body dans mon world partant de ma def
-		body = world.createBody(playerBodyDef);
+		body = world.createBody(characterBodyDef);
 
 		CircleShape circleShape = new CircleShape();
 		circleShape.setRadius(0.1f);
-		firstFixtureDef.shape = circleShape;
+		characterFixtureDef.shape = circleShape;
 
-		body.createFixture(firstFixtureDef);
+		body.createFixture(characterFixtureDef);
 	}
 
 	private void associateSpriteToBody() {
