@@ -26,9 +26,8 @@ public class ProceduralGeneration extends Thread{
 	public  boolean isCorridored = false;
 	public final Object hallListLock = new Object();
 	public ArrayList<Triangle> triangles;
-	
-	
-	
+	private Matrice matrice;
+
 	@Override
 	public void run() {
 		createGeneration();
@@ -70,7 +69,7 @@ public class ProceduralGeneration extends Thread{
 				
 		Gdx.app.debug("matrice", "Generation de la matrice");
 		MatriceGeneration generation = new MatriceGeneration(hallList);
-		Matrice matrice = generation.generate();
+		matrice = generation.generate();
 		Gdx.app.debug("matrice", "Print de la matrice");
 		matrice.print();
 		
@@ -328,5 +327,9 @@ public class ProceduralGeneration extends Thread{
 		}
 	}
 	
+	
+	public Matrice getMatrice() {
+		return matrice;
+	}
 	
 }

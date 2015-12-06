@@ -84,7 +84,7 @@ public class GenerationScreen implements Screen {
 		
 		shape.end();
 		if(generation.getState()==Thread.State.TERMINATED){
-			GameScreen gameScreen = new GameScreen(game);
+			GameScreen gameScreen = new GameScreen(game, generation.getMatrice());
 			game.setScreen(gameScreen);
 			dispose();
 		}

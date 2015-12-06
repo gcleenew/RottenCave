@@ -1,5 +1,6 @@
 package org.isep.rottencave.screens;
 
+import org.isep.matrice.Matrice;
 import org.isep.rottencave.RottenCave;
 import org.isep.rottencave.GameEnvironement.BlockMap;
 import org.isep.rottencave.GameEnvironement.Character;
@@ -45,26 +46,53 @@ public class GameScreen implements Screen {
 	private Touchpad stick;
 	private Skin uiSkin;
 
+	private Matrice matriceMap;
+
 	public final static float WOLRD_WIDTH = 6.4f;
 	public final static float WORLD_HEIGHT = 4.0f;
+	
+	private float starterX =  6.4f / 2;
 
-	public GameScreen(final RottenCave game) {
+	private float starterY = 4.0f / 2;
+
+	
+
+	public GameScreen(final RottenCave game, Matrice matrice) {
 		this.game = game;
 		this.uiSkin = game.getUiSkin();
-
+		this.matriceMap = matrice;
 		batch = new SpriteBatch();
 		camera = new OrthographicCamera();
 		camera.setToOrtho(false, WOLRD_WIDTH, WORLD_HEIGHT);
 		world = new World(new Vector2(0f, 0f), true);
 		debugRenderer = new Box2DDebugRenderer(true, true, true, true, true, true);
 
-		playerCharacter = new Character(world, WOLRD_WIDTH / 2, WORLD_HEIGHT / 2, true);
-		monsterCharacter = new Character(world, WOLRD_WIDTH / 2, WORLD_HEIGHT / 2, false);
 		
-		new BlockMap(world, 1, 1, true);
-		new BlockMap(world, 2, 1, false);
+		generateBlocksFromMatrice();
+		
+		playerCharacter = new Character(world, starterX, starterY, true);
+		monsterCharacter = new Character(world, WOLRD_WIDTH / 2, WORLD_HEIGHT / 2, false);
 
 		createTouchpad();
+	}
+	
+	private void generateBlocksFromMatrice(){
+		Boolean firstGroud=false;
+		for(int x=0; x<matriceMap.rangeX; x++){		
+			for(int y=0; y<matriceMap.rangeY; y++){	
+				if(matriceMap.matrice[x][y].status==1){
+					new BlockMap(world, x, y, false);
+					if(!firstGroud){
+						firstGroud=true;
+						starterX = x*0.5f;
+						starterY = y*0.5f;
+					}
+				}else if(matriceMap.matrice[x][y].status>=2){
+					new BlockMap(world, x, y, true);
+				}
+			}
+	
+		}
 	}
 	
 	private void createTouchpad() {
