@@ -8,14 +8,13 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 
 public class RottenCave extends Game {
-	private Skin uiSkin;
+	private static Skin uiSkin;
 	
 	@Override
 	public void create () {
 		Gdx.app.setLogLevel(Application.LOG_DEBUG);
 		
 		uiSkin = new Skin(Gdx.files.internal("uiskin.json"));
-		
 		this.setScreen(new MainMenuScreen(this));
 	}
 
@@ -30,7 +29,7 @@ public class RottenCave extends Game {
 		uiSkin.dispose();
 	}
 
-	public Skin getUiSkin() {
+	public static Skin getUiSkin() {
 		return uiSkin;
 	}
 }
