@@ -51,7 +51,7 @@ public class Character {
 		body = world.createBody(characterBodyDef);
 
 		CircleShape circleShape = new CircleShape();
-		circleShape.setRadius(0.1f);
+		circleShape.setRadius(0.2f);
 		characterFixtureDef.shape = circleShape;
 
 		body.createFixture(characterFixtureDef);
@@ -61,11 +61,13 @@ public class Character {
 		Sprite sprite =null;
 		if (isPlayer()) {
 			sprite = new Sprite(new Texture(Gdx.files.internal("img/playerSprite.png")));
+			sprite.setSize(0.2f, 0.4f);
 		}else{
 			sprite = new Sprite(new Texture(Gdx.files.internal("img/monsterSprite.png")));
+			sprite.setSize(0.4f, 0.6f);
 		}
 		body.setUserData(sprite);
-		sprite.setSize(0.2f, 0.2f);
+		
 	}
 
 	public void setVelocity(float vX, float vY){

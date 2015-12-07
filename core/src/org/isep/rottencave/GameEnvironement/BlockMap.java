@@ -17,16 +17,16 @@ public class BlockMap {
 	
 	private Body body;
 	private World world;
-	private Boolean wall = false;
+	private Integer type;
 	private Rectangle rect;
 	private final float posX;
 	private final float posY;
 	
 	
 	
-	public BlockMap(World world, float x, float y, Boolean isWall) {
+	public BlockMap(World world, float x, float y, Integer type) {
 		this.world = world;
-		this.wall = isWall;
+		this.type = type;
 		posX = x*BLOCK_SIZE;
 		posY = y*BLOCK_SIZE;
 		rect = new Rectangle(0, 0, BLOCK_SIZE, BLOCK_SIZE);
@@ -41,7 +41,7 @@ public class BlockMap {
 
 
 		FixtureDef blockFixtureDef = new FixtureDef();
-		if(!wall){
+		if(type==1){
 			blockFixtureDef.isSensor=true;
 		}
 		Vector2[] vect = vectorTabFromRect(rect);
@@ -66,10 +66,16 @@ public class BlockMap {
 	
 	private void associateSpriteToBody() {
 		Sprite sprite =null;
-		if (wall) {
-			sprite = new Sprite(new Texture(Gdx.files.internal("img/wall.png")));
-		}else{
-			sprite = new Sprite(new Texture(Gdx.files.internal("img/ground.png")));
+		if (type==1) {
+			sprite = new Sprite(new Texture(Gdx.files.internal("img/sol.png")));
+		}else if(type==2){
+			sprite = new Sprite(new Texture(Gdx.files.internal("img/mur bas.png")));
+		}else if(type==3){
+			sprite = new Sprite(new Texture(Gdx.files.internal("img/mur droite.png")));
+		}else if(type==4){
+			sprite = new Sprite(new Texture(Gdx.files.internal("img/mur haut.png")));
+		}else if(type==5){
+			sprite = new Sprite(new Texture(Gdx.files.internal("img/mur gauche.png")));
 		}
 		body.setUserData(sprite);
 		sprite.setSize(BLOCK_SIZE, BLOCK_SIZE);

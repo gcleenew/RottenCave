@@ -79,19 +79,17 @@ public class GameScreen implements Screen {
 	private void generateBlocksFromMatrice(){
 		Boolean firstGroud=false;
 		for(int x=0; x<matriceMap.rangeX; x++){		
-			for(int y=0; y<matriceMap.rangeY; y++){	
-				if(matriceMap.matrice[x][y].status==1){
-					new BlockMap(world, x, y, false);
-					if(!firstGroud){
+			for(int y=0; y<matriceMap.rangeY; y++){
+				int curStatus = matriceMap.matrice[x][y].status;
+				if(curStatus>0){
+					new BlockMap(world, x, y, curStatus);
+					if(curStatus==1 && !firstGroud){
 						firstGroud=true;
 						starterX = x*0.5f;
 						starterY = y*0.5f;
 					}
-				}else if(matriceMap.matrice[x][y].status>=2){
-					new BlockMap(world, x, y, true);
 				}
 			}
-	
 		}
 	}
 	
@@ -123,9 +121,9 @@ public class GameScreen implements Screen {
 		for (Body curBody : tmpBodies) {
 			if (curBody.getUserData() != null && curBody.getUserData() instanceof Sprite) {
 				Sprite sprite = (Sprite) curBody.getUserData();
-				if(curBody.getType()==BodyType.StaticBody){
-				sprite.setPosition(curBody.getPosition().x, curBody.getPosition().y);
-				}else{
+				if (curBody.getType() == BodyType.StaticBody) {
+					sprite.setPosition(curBody.getPosition().x, curBody.getPosition().y);
+				} else {
 					sprite.setPosition(curBody.getPosition().x - sprite.getWidth() / 2,
 							curBody.getPosition().y - sprite.getHeight() / 2);
 				}
