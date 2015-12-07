@@ -65,13 +65,13 @@ public class GameScreen implements Screen {
 		camera = new OrthographicCamera();
 		camera.setToOrtho(false, WOLRD_WIDTH, WORLD_HEIGHT);
 		world = new World(new Vector2(0f, 0f), true);
-		debugRenderer = new Box2DDebugRenderer(true, true, true, true, true, true);
+		debugRenderer = new Box2DDebugRenderer(false, false, false, false, true, false);
 
 		
 		generateBlocksFromMatrice();
 		
 		playerCharacter = new Character(world, starterX, starterY, true);
-		monsterCharacter = new Character(world, WOLRD_WIDTH / 2, WORLD_HEIGHT / 2, false);
+		monsterCharacter = new Character(world, starterX, starterY, false);
 
 		createTouchpad();
 	}
