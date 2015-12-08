@@ -59,12 +59,12 @@ public class ProceduralGeneration extends Thread{
 		isTriangulated = false;
 		spanningTree(s);
 		
-		try {
-			Thread.sleep(1200);
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+//		try {
+//			Thread.sleep(1200);
+//		} catch (InterruptedException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}
 		isST = false;
 		createCorridor();	
 		isCorridored = true;
@@ -129,12 +129,12 @@ public class ProceduralGeneration extends Thread{
 				collision = hall.computeSeparation(hallList)? true: collision;
 				hall.move();
 			}
-			try {
-				Thread.sleep(1);
-			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+//			try {
+//				Thread.sleep(1);
+//			} catch (InterruptedException e) {
+//				// TODO Auto-generated catch block
+//				e.printStackTrace();
+//			}
 		}
 	}
 	
@@ -251,12 +251,12 @@ public class ProceduralGeneration extends Thread{
 				if(!Corridor.getExist(corridorList, hall, sucessor)) {
 					Corridor corridor = new Corridor(hall, sucessor);
 					corridorList.add(corridor);
-					try {
-						Thread.sleep(150);
-					} catch (InterruptedException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
+//					try {
+//						Thread.sleep(150);
+//					} catch (InterruptedException e) {
+//						// TODO Auto-generated catch block
+//						e.printStackTrace();
+//					}
 				}
 			}
 		}

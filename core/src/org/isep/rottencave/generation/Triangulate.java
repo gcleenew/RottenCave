@@ -144,12 +144,12 @@ public class Triangulate {
 					continue;
 				}
 				triangles.add(new Triangle(e.p1, e.p2, p));
-				try {
-					Thread.sleep(3);
-				} catch (InterruptedException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
-				}
+//				try {
+//					Thread.sleep(3);
+//				} catch (InterruptedException e1) {
+//					// TODO Auto-generated catch block
+//					e1.printStackTrace();
+//				}
 			}
 
 		}
