@@ -13,7 +13,7 @@ import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
 
 public class BlockMap {
-	static private final float BLOCK_SIZE = 0.5f;;
+	public static final float BLOCK_SIZE = 0.5f;;
 	
 	private Body body;
 	private World world;

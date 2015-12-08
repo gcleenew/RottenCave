@@ -51,7 +51,12 @@ public class Character {
 		body = world.createBody(characterBodyDef);
 
 		CircleShape circleShape = new CircleShape();
-		circleShape.setRadius(0.2f);
+		if(player){
+			circleShape.setRadius(0.3f);
+		}else{
+			circleShape.setRadius(0.45f);
+		}
+		
 		characterFixtureDef.shape = circleShape;
 
 		body.createFixture(characterFixtureDef);
@@ -61,10 +66,10 @@ public class Character {
 		Sprite sprite =null;
 		if (isPlayer()) {
 			sprite = new Sprite(new Texture(Gdx.files.internal("img/playerSprite.png")));
-			sprite.setSize(0.2f, 0.4f);
+			sprite.setSize(0.3f, 0.6f);
 		}else{
 			sprite = new Sprite(new Texture(Gdx.files.internal("img/monsterSprite.png")));
-			sprite.setSize(0.4f, 0.6f);
+			sprite.setSize(0.8f, 1f);
 		}
 		body.setUserData(sprite);
 		

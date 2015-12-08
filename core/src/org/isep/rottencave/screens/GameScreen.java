@@ -1,5 +1,7 @@
 package org.isep.rottencave.screens;
 
+import java.util.HashSet;
+
 import org.isep.matrice.Matrice;
 import org.isep.rottencave.RottenCave;
 import org.isep.rottencave.GameEnvironement.BlockMap;
@@ -10,17 +12,13 @@ import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
-import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
-import com.badlogic.gdx.physics.box2d.Contact;
-import com.badlogic.gdx.physics.box2d.FixtureDef;
-import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
@@ -38,6 +36,7 @@ public class GameScreen implements Screen {
 	private Character playerCharacter;
 	private Character monsterCharacter;
 	private Array<Body> tmpBodies = new Array<Body>();
+	private HashSet<Sprite> tiledSprites = new HashSet<Sprite>();
 	
 	/**
 	 * Used for touchpad
@@ -50,6 +49,7 @@ public class GameScreen implements Screen {
 
 	public final static float WOLRD_WIDTH = 6.4f;
 	public final static float WORLD_HEIGHT = 4.0f;
+	public final static float DISTANCE_RENDERING = 4.0f;
 	
 	private float starterX =  6.4f / 2;
 
@@ -81,13 +81,18 @@ public class GameScreen implements Screen {
 		for(int x=0; x<matriceMap.rangeX; x++){		
 			for(int y=0; y<matriceMap.rangeY; y++){
 				int curStatus = matriceMap.matrice[x][y].status;
-				if(curStatus>0){
-					new BlockMap(world, x, y, curStatus);
+				if(curStatus==1){
+					Sprite sprite = new Sprite(new Texture(Gdx.files.internal("img/sol.png")));
+					sprite.setPosition(x*BlockMap.BLOCK_SIZE, y*BlockMap.BLOCK_SIZE);
+					sprite.setSize(BlockMap.BLOCK_SIZE, BlockMap.BLOCK_SIZE);
+					tiledSprites.add(sprite);
 					if(curStatus==1 && !firstGroud){
 						firstGroud=true;
 						starterX = x*0.5f;
 						starterY = y*0.5f;
 					}
+				}else if(curStatus>1){
+					new BlockMap(world, x, y, curStatus);
 				}
 			}
 		}
@@ -117,6 +122,13 @@ public class GameScreen implements Screen {
 		batch.setProjectionMatrix(camera.combined);
 
 		batch.begin();
+		for(Sprite tileSprite : tiledSprites){
+			if(Math.abs(tileSprite.getX()-playerCharacter.getBody().getPosition().x)<DISTANCE_RENDERING && 
+					Math.abs(tileSprite.getY()-playerCharacter.getBody().getPosition().y)<DISTANCE_RENDERING){
+				tileSprite.draw(batch);
+			}
+		}
+		
 		world.getBodies(tmpBodies);
 		for (Body curBody : tmpBodies) {
 			if (curBody.getUserData() != null && curBody.getUserData() instanceof Sprite) {
@@ -127,14 +139,17 @@ public class GameScreen implements Screen {
 					sprite.setPosition(curBody.getPosition().x - sprite.getWidth() / 2,
 							curBody.getPosition().y - sprite.getHeight() / 2);
 				}
-				sprite.draw(batch);
+				if(Math.abs(sprite.getX()-playerCharacter.getBody().getPosition().x)<DISTANCE_RENDERING && 
+						Math.abs(sprite.getY()-playerCharacter.getBody().getPosition().y)<DISTANCE_RENDERING){
+					sprite.draw(batch);
+				}
 			}
 		}
 		batch.end();
 
 		checkControl();
 		monsterStep();
-		world.step(1 / 60f, 6, 2);
+		world.step(1 / 60f, 1, 1);
 	}
 
 	private void monsterStep(){
