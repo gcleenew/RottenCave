@@ -1,5 +1,7 @@
 package org.isep.rottencave.screens;
 
+import java.util.HashSet;
+
 import org.isep.matrice.Matrice;
 import org.isep.rottencave.RottenCave;
 import org.isep.rottencave.GameEnvironement.BlockMap;
@@ -10,6 +12,7 @@ import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Rectangle;
@@ -38,6 +41,7 @@ public class GameScreen implements Screen {
 	private Character playerCharacter;
 	private Character monsterCharacter;
 	private Array<Body> tmpBodies = new Array<Body>();
+	private HashSet<Sprite> tiledSprites = new HashSet<Sprite>();
 	
 	/**
 	 * Used for touchpad
@@ -71,7 +75,7 @@ public class GameScreen implements Screen {
 		generateBlocksFromMatrice();
 		
 		playerCharacter = new Character(world, starterX, starterY, true);
-		monsterCharacter = new Character(world, WOLRD_WIDTH / 2, WORLD_HEIGHT / 2, false);
+		monsterCharacter = new Character(world, starterX, starterY, false);
 
 		createTouchpad();
 	}
@@ -81,13 +85,18 @@ public class GameScreen implements Screen {
 		for(int x=0; x<matriceMap.rangeX; x++){		
 			for(int y=0; y<matriceMap.rangeY; y++){
 				int curStatus = matriceMap.matrice[x][y].status;
-				if(curStatus>0){
-					new BlockMap(world, x, y, curStatus);
+				if(curStatus==1){
+					Sprite sprite = new Sprite(new Texture(Gdx.files.internal("img/sol.png")));
+					sprite.setPosition(x*BlockMap.BLOCK_SIZE, y*BlockMap.BLOCK_SIZE);
+					sprite.setSize(BlockMap.BLOCK_SIZE, BlockMap.BLOCK_SIZE);
+					tiledSprites.add(sprite);
 					if(curStatus==1 && !firstGroud){
 						firstGroud=true;
 						starterX = x*0.5f;
 						starterY = y*0.5f;
 					}
+				}else if(curStatus>1){
+					new BlockMap(world, x, y, curStatus);
 				}
 			}
 		}
@@ -117,6 +126,10 @@ public class GameScreen implements Screen {
 		batch.setProjectionMatrix(camera.combined);
 
 		batch.begin();
+		for(Sprite tileSprite : tiledSprites){
+			tileSprite.draw(batch);
+		}
+		
 		world.getBodies(tmpBodies);
 		for (Body curBody : tmpBodies) {
 			if (curBody.getUserData() != null && curBody.getUserData() instanceof Sprite) {
