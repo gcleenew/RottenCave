@@ -14,7 +14,7 @@ public class MatriceCell {
 	}
 	
 	public void setStatus(int status){
-		if((int) this.status >= 2 && (int) status >= 2) {
+		if((int) this.status >= 2 && (int) status >= 2 && (this.belonging.getIsMain())) {
 			this.status = 1;
 		}
 		if(this.status != 1) {
