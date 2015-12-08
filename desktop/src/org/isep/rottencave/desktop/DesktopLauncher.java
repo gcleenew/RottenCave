@@ -10,7 +10,6 @@ public class DesktopLauncher {
 		config.title = "Rotten Cave";
 		config.width = 800;
 		config.height = 480;
-		
 		new LwjglApplication(new RottenCave(), config);
 	}
 }

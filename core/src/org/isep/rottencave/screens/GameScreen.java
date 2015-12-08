@@ -15,15 +15,10 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
-import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
-import com.badlogic.gdx.physics.box2d.Contact;
-import com.badlogic.gdx.physics.box2d.FixtureDef;
-import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
@@ -54,6 +49,7 @@ public class GameScreen implements Screen {
 
 	public final static float WOLRD_WIDTH = 6.4f;
 	public final static float WORLD_HEIGHT = 4.0f;
+	public final static float DISTANCE_RENDERING = 4.0f;
 	
 	private float starterX =  6.4f / 2;
 
@@ -127,7 +123,10 @@ public class GameScreen implements Screen {
 
 		batch.begin();
 		for(Sprite tileSprite : tiledSprites){
-			tileSprite.draw(batch);
+			if(Math.abs(tileSprite.getX()-playerCharacter.getBody().getPosition().x)<DISTANCE_RENDERING && 
+					Math.abs(tileSprite.getY()-playerCharacter.getBody().getPosition().y)<DISTANCE_RENDERING){
+				tileSprite.draw(batch);
+			}
 		}
 		
 		world.getBodies(tmpBodies);
@@ -140,14 +139,17 @@ public class GameScreen implements Screen {
 					sprite.setPosition(curBody.getPosition().x - sprite.getWidth() / 2,
 							curBody.getPosition().y - sprite.getHeight() / 2);
 				}
-				sprite.draw(batch);
+				if(Math.abs(sprite.getX()-playerCharacter.getBody().getPosition().x)<DISTANCE_RENDERING && 
+						Math.abs(sprite.getY()-playerCharacter.getBody().getPosition().y)<DISTANCE_RENDERING){
+					sprite.draw(batch);
+				}
 			}
 		}
 		batch.end();
 
 		checkControl();
 		monsterStep();
-		world.step(1 / 60f, 6, 2);
+		world.step(1 / 60f, 1, 1);
 	}
 
 	private void monsterStep(){
