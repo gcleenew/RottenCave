@@ -11,13 +11,13 @@ import com.badlogic.gdx.Gdx;
 
 
 public class ProceduralGeneration extends Thread{
-	public static int TILE_SIZE = 16;
+	public static int TILE_SIZE = 5;
 	public static int CORRIDOR_SIZE = 4;
 	public  final int NUM_ELEMENT = 100;
 	public  ArrayList<Hall> hallList;
 	public  ArrayList<Hall> mainHallList;
 	public 	ArrayList<Corridor> corridorList;
-	
+	public  Long seed;
 	public  double width_mean;
 	public  double height_mean;
 	public  ArrayList<Point> points;
@@ -28,6 +28,9 @@ public class ProceduralGeneration extends Thread{
 	public ArrayList<Triangle> triangles;
 	private Matrice matrice;
 
+	public ProceduralGeneration(Long seed){
+		this.seed = seed;
+	}
 	@Override
 	public void run() {
 		createGeneration();
@@ -83,14 +86,20 @@ public class ProceduralGeneration extends Thread{
 	public ArrayList<Hall> createHall() {
 		double height_sum = 0;
 		double width_sum = 0;
-		Random randomGenerator = new Random(540540L);
+		Random randomGenerator = null;
+		if(seed != null) {
+			randomGenerator = new Random(seed);
+		}else{
+			randomGenerator = new Random();
+		}
+		
 		for(int i = 0; i < NUM_ELEMENT; i++){
-			int randomX = (randomGenerator.nextInt(5)+4)*TILE_SIZE;
-			int randomY = (randomGenerator.nextInt(5)+4)*TILE_SIZE;
+			int randomX = (randomGenerator.nextInt(10)+4)*TILE_SIZE;
+			int randomY = (randomGenerator.nextInt(10)+4)*TILE_SIZE;
 			Point point = new Point(0, 0);
 			point.setRandomPositionInCircle(10*TILE_SIZE, randomGenerator);
-			point.x += 25*TILE_SIZE;
-			point.y += 16*TILE_SIZE;
+			point.x += 75*TILE_SIZE;
+			point.y += 45*TILE_SIZE;
 			int largeur = (randomX);
 			int longueur = (randomY);
 			Hall square = new Hall(point, largeur, longueur);
@@ -266,13 +275,13 @@ public class ProceduralGeneration extends Thread{
 					point1.x = corridor.entree1.x;
 					point1.y = Math.abs(corridor.entree1.y + corridor.passage.y)/2;
 					int largeur = (CORRIDOR_SIZE)*TILE_SIZE;
-					int longueur = (int) (Math.abs(corridor.entree1.y - corridor.passage.y)) + 2 * TILE_SIZE;
+					int longueur = (int) (Math.abs(corridor.entree1.y - corridor.passage.y)) + 3 * TILE_SIZE;
 					hall_corridor1 = new Hall(point1, largeur, longueur);
 				}
 				else {
 					point1.x = Math.abs(corridor.entree1.x + corridor.passage.x)/2;
 					point1.y = corridor.entree1.y;
-					int largeur = (int) (Math.abs(corridor.entree1.x - corridor.passage.x)) + 2 * TILE_SIZE;
+					int largeur = (int) (Math.abs(corridor.entree1.x - corridor.passage.x)) + 3 * TILE_SIZE;
 					int longueur = (CORRIDOR_SIZE)*TILE_SIZE;
 					hall_corridor1 = new Hall(point1, largeur, longueur);
 				}	
@@ -288,13 +297,13 @@ public class ProceduralGeneration extends Thread{
 					point2.x = corridor.entree2.x;
 					point2.y = Math.abs(corridor.entree2.y + corridor.passage.y)/2;
 					int largeur = (CORRIDOR_SIZE)*TILE_SIZE;
-					int longueur = (int) (Math.abs(corridor.entree2.y - corridor.passage.y)) + 2 * TILE_SIZE;
+					int longueur = (int) (Math.abs(corridor.entree2.y - corridor.passage.y)) + 3 * TILE_SIZE;
 					hall_corridor2 = new Hall(point2, largeur, longueur);
 				}
 				else {
 					point2.x = Math.abs(corridor.entree2.x + corridor.passage.x)/2;
 					point2.y = corridor.entree2.y;
-					int largeur = (int) (Math.abs(corridor.entree2.x - corridor.passage.x)) + 2 * TILE_SIZE;
+					int largeur = (int) (Math.abs(corridor.entree2.x - corridor.passage.x)) + 3 * TILE_SIZE;
 					int longueur = (CORRIDOR_SIZE)*TILE_SIZE;
 					hall_corridor2 = new Hall(point2, largeur, longueur);
 				}	
@@ -306,7 +315,7 @@ public class ProceduralGeneration extends Thread{
 				Point point = new Point(0,0);
 				point.x = Math.abs(corridor.entree1.x + corridor.entree2.x)/2;
 				point.y = corridor.passage.y;
-				int largeur = (int) (Math.abs(corridor.entree2.x - corridor.entree1.x)) + 2 * TILE_SIZE;
+				int largeur = (int) (Math.abs(corridor.entree2.x - corridor.entree1.x)) + 3 * TILE_SIZE;
 				int longueur = (CORRIDOR_SIZE)*TILE_SIZE;
 				Hall hall_corridor = new Hall(point, largeur, longueur);
 				point.setHall(hall_corridor);
@@ -318,7 +327,7 @@ public class ProceduralGeneration extends Thread{
 				point.x = corridor.passage.x;
 				point.y = Math.abs(corridor.entree2.y + corridor.entree1.y)/2;
 				int largeur = (CORRIDOR_SIZE)*TILE_SIZE;
-				int longueur = (int) (Math.abs(corridor.entree2.y - corridor.entree1.y)) + 2 * TILE_SIZE;
+				int longueur = (int) (Math.abs(corridor.entree2.y - corridor.entree1.y)) + 3 * TILE_SIZE ;
 				Hall hall_corridor = new Hall(point, largeur, longueur);
 				point.setHall(hall_corridor);
 				hall_corridor.setCorridor(true);

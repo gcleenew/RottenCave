@@ -27,7 +27,7 @@ public class GenerationScreen implements Screen {
 		
 		camera = new OrthographicCamera();
 		camera.setToOrtho(false, 800, 400);
-		generation = new ProceduralGeneration();
+		generation = new ProceduralGeneration(null);
 		shape = new ShapeRenderer();
 	}
 	
