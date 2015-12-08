@@ -8,7 +8,7 @@ public class Matrice {
 	public MatriceCell[][] matrice;
 	public int minX, minY, maxX, maxY;
 	public int rangeX, rangeY;
-	private static int TILE_SIZE = 16;
+	private static int TILE_SIZE = 5;
 	
 	public Matrice(int minX, int minY, int maxX, int maxY) {
 		this.minX = minX; this.minY = minY; this.maxX = maxX; this.maxY = maxY;
@@ -28,8 +28,6 @@ public class Matrice {
 		int y = (int) (hall.getPosY() - this.minY) / TILE_SIZE;
 		int width = (int) hall.getLargeur()  / TILE_SIZE;
 		int length = (int) hall.getLongueur()  / TILE_SIZE;
-		Gdx.app.debug("matrice", "Generation de la matrice, hall: posX :"+hall.getPosX()+", posY :"+hall.getPosY());
-		Gdx.app.debug("matrice", "Generation de la matrice, hall: posX :"+x+", posY :"+y);
 		for (int i = 0; i < width; i++) {
 			for (int j = 0; j < length; j++) {
 				if(j == 0) {
@@ -68,7 +66,7 @@ public class Matrice {
 		
 		for (int i = 0; i < width; i++) {
 			for (int j = 0; j < length; j++) {
-				if(this.matrice[x+i][y+j].getStatus() != 0) {
+				if(this.matrice[x+i][y+j].getStatus() == 1) {
 					return true;
 				}
 			}
