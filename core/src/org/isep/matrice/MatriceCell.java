@@ -13,14 +13,6 @@ public class MatriceCell {
 		this.status = 0;
 	}
 	
-	public void setStatus(int status){
-		if((int) this.status >= 2 && (int) status >= 2 && (this.belonging.getIsMain())) {
-			this.status = 1;
-		}
-		if(this.status != 1) {
-			this.status = status;
-		}
-	}
 	
 	public int getStatus(){
 		return this.status;

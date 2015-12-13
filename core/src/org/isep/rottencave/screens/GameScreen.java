@@ -116,8 +116,6 @@ public class GameScreen implements Screen {
 		// use this to center camera on player.
 		camera.position.set(playerCharacter.getBody().getPosition(), 0f);
 		camera.update();
-		stage.act(delta);
-		stage.draw();
 
 		batch.setProjectionMatrix(camera.combined);
 
@@ -150,6 +148,9 @@ public class GameScreen implements Screen {
 		checkControl();
 		monsterStep();
 		world.step(1 / 60f, 1, 1);
+
+		stage.act(delta);
+		stage.draw();
 	}
 
 	private void monsterStep(){

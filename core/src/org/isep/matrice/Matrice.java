@@ -31,19 +31,19 @@ public class Matrice {
 		for (int i = 0; i < width; i++) {
 			for (int j = 0; j < length; j++) {
 				if(j == 0) {
-					this.matrice[x+i][y+j].setStatus(2);
+					setStatus(2, this.matrice[x+i][y+j], 1, i, j, width, length) ;
 				}
 				else if(i == width -1) {
-					this.matrice[x+i][y+j].setStatus(3);
+					setStatus(3, this.matrice[x+i][y+j], 2, i, j, width, length);
 				}
 				else if(j == length -1) {
-					this.matrice[x+i][y+j].setStatus(4);
+					setStatus(4, this.matrice[x+i][y+j], 1, i, j, width, length);
 				}
 				else if(i == 0) {
-					this.matrice[x+i][y+j].setStatus(5);
+					setStatus(5, this.matrice[x+i][y+j], 2, i, j, width, length);
 				}
 				else {
-					this.matrice[x+i][y+j].setStatus(1);
+					setStatus(1, this.matrice[x+i][y+j], 0, i, j, width, length);
 				};			
 				
 				if (this.matrice[x+i][y+j].belonging != null){
@@ -55,6 +55,20 @@ public class Matrice {
 					this.matrice[x+i][y+j].belonging = hall;
 				}
 			}
+		}
+	}
+	
+	public void setStatus(int status, MatriceCell cell, int position, int x, int y, int width, int length ){
+		if((int) cell.status >= 2 && (int) status >= 2 && cell.belonging.getIsMain()) {
+			if(width <= 4 && position == 1 && x != 0 && x != width-1) {
+				cell.status = 1;
+			}
+			if(length <= 4 && position == 2 && y != 0 && y != length-1) {
+				cell.status = 1;
+			}
+		}
+		if(cell.status != 1) {
+			cell.status = status;
 		}
 	}
 	
@@ -78,7 +92,7 @@ public class Matrice {
 		for (int j = 0; j < rangeY; j++) {
 			System.out.println();
 			for (int i = 0; i < rangeX; i++) {
-				System.out.print(this.matrice[i][j].getStatus());
+				System.out.print(this.matrice[i][rangeY-j-1].getStatus());
 			}
 		}
 	}
