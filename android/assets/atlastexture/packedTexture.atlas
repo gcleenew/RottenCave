@@ -1,0 +1,111 @@
+
+packedTexture.png
+size: 256,128
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+mur bas
+  rotate: false
+  xy: 36, 25
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+mur bas moisi
+  rotate: false
+  xy: 158, 90
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+mur droite
+  rotate: false
+  xy: 70, 25
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+mur droite moisi
+  rotate: false
+  xy: 192, 90
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+mur gauche
+  rotate: false
+  xy: 158, 56
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+mur gauche moisi
+  rotate: false
+  xy: 192, 56
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+mur haut
+  rotate: false
+  xy: 104, 25
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+mur haut moisi
+  rotate: false
+  xy: 138, 22
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+sol
+  rotate: false
+  xy: 172, 22
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+sprite héro
+  rotate: false
+  xy: 2, 2
+  size: 32, 55
+  orig: 32, 55
+  offset: 0, 0
+  index: -1
+sprite monstre 1
+  rotate: false
+  xy: 36, 6
+  size: 36, 17
+  orig: 36, 17
+  offset: 0, 0
+  index: -1
+sprite monstre 2
+  rotate: false
+  xy: 2, 59
+  size: 59, 63
+  orig: 59, 63
+  offset: 0, 0
+  index: -1
+sprite ombre héro
+  rotate: false
+  xy: 124, 67
+  size: 32, 55
+  orig: 32, 55
+  offset: 0, 0
+  index: -1
+sprite ombre monstre 1
+  rotate: false
+  xy: 74, 6
+  size: 36, 17
+  orig: 36, 17
+  offset: 0, 0
+  index: -1
+sprite ombre monstre 2
+  rotate: false
+  xy: 63, 59
+  size: 59, 63
+  orig: 59, 63
+  offset: 0, 0
+  index: -1
