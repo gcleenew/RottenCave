@@ -56,14 +56,18 @@ public class GameScreen implements Screen {
 	private float starterX =  6.4f / 2;
 	private float starterY = 4.0f / 2;
 
+	private final static float DISTANCE_TO_WIN = 0.8f;
+	private final static long MONSTER_POP_TIMER = 5000;
+	private long startTimer;
+	private boolean gameover = false;
+	
+
 
 	public GameScreen(final RottenCave game, Matrice matrice) {
 		this.game = game;
 		this.uiSkin = game.getUiSkin();
 		this.matriceMap = matrice;
 		this.textureAtlas = new TextureAtlas(Gdx.files.internal("atlastexture/packedTexture.atlas"));
-//		this.textureAtlas = new TextureAtlas(Gdx.files.internal("img/mur droite.png"));
-		
 		
 		batch = new SpriteBatch();
 		camera = new OrthographicCamera();
@@ -75,7 +79,7 @@ public class GameScreen implements Screen {
 		generateBlocksFromMatrice();
 		
 		playerCharacter = new Character(world, starterX, starterY, true);
-		monsterCharacter = new Character(world, starterX, starterY, false);
+//		monsterCharacter = new Character(world, starterX, starterY, false);
 
 		createTouchpad();
 	}
@@ -130,6 +134,12 @@ public class GameScreen implements Screen {
 
 		stage.act(delta);
 		stage.draw();
+		
+		if(gameover) {
+			MainMenuScreen menuScreen = new MainMenuScreen(game);
+			game.setScreen(menuScreen);
+			dispose();	
+		}
 	}
 	
 	private void drawSprites(){
@@ -159,14 +169,27 @@ public class GameScreen implements Screen {
 	}
 
 	private void monsterStep(){
-		Vector2 monsterPos = monsterCharacter.getBody().getPosition();
-		Vector2 playerPos = playerCharacter.getBody().getPosition();
-
-		double theta = Math.atan2(playerPos.y - monsterPos.y, playerPos.x - monsterPos.x);
-		if (theta < 0) {
-			theta += Math.PI * 2;
+		long popedTime = System.currentTimeMillis()-startTimer;
+		if(monsterCharacter!=null){
+			monsterCharacter.incMonsterSpeed(popedTime);
+			Vector2 monsterPos = monsterCharacter.getBody().getPosition();
+			Vector2 playerPos = playerCharacter.getBody().getPosition();
+			double deltaY = playerPos.y - monsterPos.y;
+			double deltaX = playerPos.x - monsterPos.x;
+			
+			if(deltaY<DISTANCE_TO_WIN && deltaX <DISTANCE_TO_WIN){
+				System.out.println("GAME OVER");
+				gameover=true;
+			}
+			double theta = Math.atan2(playerPos.y - monsterPos.y, playerPos.x - monsterPos.x);
+			if (theta < 0) {
+				theta += Math.PI * 2;
+			}
+			monsterCharacter.setMoveAngle((float) theta);
+			
+		}else if(popedTime>MONSTER_POP_TIMER){		
+			monsterCharacter = new Character(world, starterX, starterY, false);	 
 		}
-		monsterCharacter.setMoveAngle((float) theta);
 	}
 	
 	private void checkControl() {
@@ -193,7 +216,7 @@ public class GameScreen implements Screen {
 
 	@Override
 	public void show() {
-		// Process input for touchpad
+		startTimer = System.currentTimeMillis();
 		Gdx.input.setInputProcessor(stage);
 	}
 
