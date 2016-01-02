@@ -12,7 +12,8 @@ import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.World;
 
 public class Character {
-
+	private final static long INC_RYTHME = 10000;
+	
 	private Body body;
 	private float speed;
 	private World world;
@@ -20,14 +21,18 @@ public class Character {
 
 	private float starterX;
 	private float starterY;
+	
+	private static final float PLAYER_SPEED = 1f;
+	
+	private static final float MONSTER_SPEED = 0.5f;
 
 	public Character(World world, float f, float g, Boolean isPlayer) {
 		this.world = world;
 		this.player = isPlayer;
 		if(player){
-			this.speed = 1f;
+			this.speed = PLAYER_SPEED;
 		}else{
-			this.speed = 0.5f;
+			this.speed = MONSTER_SPEED;
 		}
 		this.starterX = f;
 		this.starterY = g;
@@ -98,5 +103,10 @@ public class Character {
 	public Boolean isPlayer() {
 		return this.player;
 	}
-
+	
+	public void incMonsterSpeed(long popedTime){
+		if(speed<2*PLAYER_SPEED){
+			speed= MONSTER_SPEED + (popedTime/INC_RYTHME)*0.1f;
+		}
+	}
 }

@@ -38,11 +38,6 @@ public class BlockMap {
 		rect = new Rectangle(0, 0, BLOCK_SIZE, BLOCK_SIZE);
 		createBlockBody();
 		associateSpriteToBody();
-		if(textureAtlas==null){
-			System.out.println("NOT finded");
-		}else{
-			System.out.println("finded");
-		}
 	}
 	
 	public BlockMap(World world, float x, float y, Integer type,HashSet<Sprite> tiledSprites,TextureAtlas textureAtlas) {
@@ -91,22 +86,17 @@ public class BlockMap {
 	private void associateSpriteToBody() {
 		Sprite sprite =null;
 		if (type==1) {
-//			sprite = new Sprite(new Texture(Gdx.files.internal("img/sol.png")));
 			sprite = textureAtlas.createSprite("sol");
 			sprite.setPosition(posX, posY);
 			if(tiledSprites!=null)tiledSprites.add(sprite);
 		}else {
 			if(type==2){
-//				sprite = new Sprite(new Texture(Gdx.files.internal("img/mur bas.png")));
 				sprite = textureAtlas.createSprite("mur bas moisi");
 			}else if(type==3){
-//				sprite = new Sprite(new Texture(Gdx.files.internal("img/mur droite.png")));
 				sprite = textureAtlas.createSprite("mur droite moisi");
 			}else if(type==4){
-//				sprite = new Sprite(new Texture(Gdx.files.internal("img/mur haut.png")));
 				sprite = textureAtlas.createSprite("mur haut moisi");
 			}else if(type==5){
-//				sprite = new Sprite(new Texture(Gdx.files.internal("img/mur gauche.png")));
 				sprite = textureAtlas.createSprite("mur gauche moisi");
 			}
 			body.setUserData(sprite);
