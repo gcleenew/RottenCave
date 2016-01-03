@@ -174,10 +174,10 @@ public class GameScreen implements Screen {
 			monsterCharacter.incMonsterSpeed(popedTime);
 			Vector2 monsterPos = monsterCharacter.getBody().getPosition();
 			Vector2 playerPos = playerCharacter.getBody().getPosition();
-			double deltaY = playerPos.y - monsterPos.y;
-			double deltaX = playerPos.x - monsterPos.x;
+			double deltaY =Math.abs(playerPos.y - monsterPos.y);
+			double deltaX =Math.abs(playerPos.x - monsterPos.x);
 			
-			if(deltaY<DISTANCE_TO_WIN && deltaX <DISTANCE_TO_WIN){
+			if(deltaY < DISTANCE_TO_WIN && deltaX < DISTANCE_TO_WIN){
 				System.out.println("GAME OVER");
 				gameover=true;
 			}
