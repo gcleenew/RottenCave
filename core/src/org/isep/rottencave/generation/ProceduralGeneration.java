@@ -11,6 +11,7 @@ import com.badlogic.gdx.Gdx;
 
 
 public class ProceduralGeneration extends Thread{
+	private static Long lastSeedUsed;
 	public static int TILE_SIZE = 5;
 	public static int CORRIDOR_SIZE = 4;
 	public  final int NUM_ELEMENT = 100;
@@ -86,12 +87,13 @@ public class ProceduralGeneration extends Thread{
 	public ArrayList<Hall> createHall() {
 		double height_sum = 0;
 		double width_sum = 0;
-		Random randomGenerator = null;
-		if(seed != null) {
-			randomGenerator = new Random(seed);
-		}else{
-			randomGenerator = new Random();
+		Random randomGenerator = new Random();
+		if(seed == null) {
+			seed = (long) (randomGenerator.nextFloat() * 100000000);
 		}
+
+		lastSeedUsed = seed;
+		randomGenerator = new Random(seed);
 		
 		for(int i = 0; i < NUM_ELEMENT; i++){
 			int randomX = (randomGenerator.nextInt(10)+4)*TILE_SIZE;
@@ -339,6 +341,9 @@ public class ProceduralGeneration extends Thread{
 	
 	public Matrice getMatrice() {
 		return matrice;
+	}
+	public static Long getLastSeedUsed() {
+		return lastSeedUsed;
 	}
 	
 }

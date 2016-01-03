@@ -1,18 +1,21 @@
 package org.isep.rottencave.screens;
 
+import java.util.Date;
 import java.util.HashSet;
 
 import org.isep.matrice.Matrice;
 import org.isep.rottencave.RottenCave;
 import org.isep.rottencave.GameEnvironement.BlockMap;
 import org.isep.rottencave.GameEnvironement.Character;
+import org.isep.rottencave.generation.ProceduralGeneration;
+import org.isep.rottencave.score.PersonalScore;
+import org.isep.rottencave.score.PersonalScoreDAO;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
@@ -136,9 +139,14 @@ public class GameScreen implements Screen {
 		stage.draw();
 		
 		if(gameover) {
-			MainMenuScreen menuScreen = new MainMenuScreen(game);
-			game.setScreen(menuScreen);
-			dispose();	
+			int score = (int) (System.currentTimeMillis() - startTimer)/1000;
+			Gdx.app.debug("Game Over", "Score : "+score);
+			PersonalScore ps = new PersonalScore(new Date(), score, ProceduralGeneration.getLastSeedUsed());
+			addPersonalScore(ps);
+			
+			game.setScreen(new GameOverScreen(game, score));
+			
+			dispose();
 		}
 	}
 	
@@ -212,6 +220,11 @@ public class GameScreen implements Screen {
 		if (stick.getKnobPercentX() != 0 || stick.getKnobPercentY() != 0){
 			playerCharacter.setVelocity(stick.getKnobPercentX(), stick.getKnobPercentY());
 		}
+	}
+	
+	private void addPersonalScore(PersonalScore ps) {
+		PersonalScoreDAO psDAO = PersonalScoreDAO.getPersonalScoreDAO();
+		psDAO.addPersonalScore(ps);
 	}
 
 	@Override

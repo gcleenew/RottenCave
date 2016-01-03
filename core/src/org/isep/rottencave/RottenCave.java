@@ -6,7 +6,6 @@ import com.badlogic.gdx.Application;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 
 public class RottenCave extends Game {
@@ -16,6 +15,7 @@ public class RottenCave extends Game {
 	public void create () {
 		Gdx.app.setLogLevel(Application.LOG_DEBUG);	
 		createSkin();
+		
 		this.setScreen(new MainMenuScreen(this));
 	}
 
