@@ -12,7 +12,6 @@ import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
@@ -174,10 +173,9 @@ public class GameScreen implements Screen {
 			monsterCharacter.incMonsterSpeed(popedTime);
 			Vector2 monsterPos = monsterCharacter.getBody().getPosition();
 			Vector2 playerPos = playerCharacter.getBody().getPosition();
-			double deltaY = playerPos.y - monsterPos.y;
-			double deltaX = playerPos.x - monsterPos.x;
-			
-			if(deltaY<DISTANCE_TO_WIN && deltaX <DISTANCE_TO_WIN){
+			double deltaY =Math.abs(playerPos.y - monsterPos.y);
+			double deltaX =Math.abs(playerPos.x - monsterPos.x);		
+			if(deltaY < DISTANCE_TO_WIN && deltaX < DISTANCE_TO_WIN){
 				System.out.println("GAME OVER");
 				gameover=true;
 			}
