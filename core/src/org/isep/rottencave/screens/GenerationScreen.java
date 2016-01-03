@@ -1,9 +1,10 @@
 package org.isep.rottencave.screens;
 
+import org.isep.rottencave.RottenCave;
 import org.isep.rottencave.generation.Corridor;
+import org.isep.rottencave.generation.Hall;
 import org.isep.rottencave.generation.Point;
 import org.isep.rottencave.generation.ProceduralGeneration;
-import org.isep.rottencave.generation.Hall;
 import org.isep.rottencave.generation.Triangle;
 
 import com.badlogic.gdx.Game;
@@ -12,23 +13,21 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 
 public class GenerationScreen implements Screen {
-	final Game game;
+	final RottenCave game;
 	private OrthographicCamera camera;
-	private Texture img;
 	private ShapeRenderer shape;
 	private ProceduralGeneration generation;
 	
-	public GenerationScreen(final Game game) {
+	public GenerationScreen(final RottenCave game) {
 		this.game=game;
 		
 		camera = new OrthographicCamera();
 		camera.setToOrtho(false, 800, 400);
-		generation = new ProceduralGeneration();
+		generation = new ProceduralGeneration(null);
 		shape = new ShapeRenderer();
 	}
 	
@@ -50,8 +49,10 @@ public class GenerationScreen implements Screen {
 					if(square.getIsMain()){
 						shape.setColor(Color.RED);
 					}
-					shape.rect((int) square.getPosX() , (int) square.getPosY(), (int) square.getLargeur() , (int) square.getLongueur() );
-					shape.setColor(Color.BLACK);
+					if((square.getIsMain() || square.isCorridor()) || !generation.isCorridored){
+						shape.rect((int) square.getPosX() , (int) square.getPosY(), (int) square.getLargeur() , (int) square.getLongueur() );
+						shape.setColor(Color.BLACK);
+					}
 				}
 			}
 			if(generation.isTriangulated) {
@@ -73,17 +74,20 @@ public class GenerationScreen implements Screen {
 					}
 				}
 			}
-			if(generation.isCorridored) {
-				shape.setColor(Color.GREEN);
-				for (Corridor corridor : generation.corridorList) {
-					shape.line((int) corridor.entree1.x, (int) corridor.entree1.y, corridor.passage.x, corridor.passage.y);
-					shape.line(corridor.passage.x, corridor.passage.y, (int) corridor.entree2.x, (int) corridor.entree2.y);
-				}
+			//corridor
+			shape.setColor(Color.BLUE);
+			for (Corridor corridor : generation.corridorList) {
+				shape.line((int) corridor.entree1.x, (int) corridor.entree1.y, corridor.passage.x, corridor.passage.y);
+				shape.line(corridor.passage.x, corridor.passage.y, (int) corridor.entree2.x, (int) corridor.entree2.y);
 			}
 		}
 		
 		shape.end();
-		
+		if(generation.getState()==Thread.State.TERMINATED){
+			GameScreen gameScreen = new GameScreen(game, generation.getMatrice());
+			game.setScreen(gameScreen);
+			dispose();
+		}
 		//Gdx.app.debug("FPS", ""+Gdx.graphics.getFramesPerSecond());
 	}
 
@@ -112,8 +116,6 @@ public class GenerationScreen implements Screen {
 
 	@Override
 	public void dispose() {
-		shape.dispose();
-		img.dispose();
 		shape.dispose();
 	}
 

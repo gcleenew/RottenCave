@@ -6,7 +6,7 @@ public class Corridor {
 	public Hall h1, h2;
 	public ArrayList<Hall> littleHall;
 	private Point midpoint;
-	private enum Status {ligneH, ligneV, L};
+	public enum Status {ligneH, ligneV, L};
 	public Status status;
 	
 	public Point entree1, entree2, passage;
@@ -98,5 +98,9 @@ public class Corridor {
 			}
 		}
 		return false;
+	}
+	
+	public String getStatus(){
+		return (String) this.status.toString();
 	}
 }
