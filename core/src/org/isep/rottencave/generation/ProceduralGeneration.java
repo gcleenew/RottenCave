@@ -59,12 +59,12 @@ public class ProceduralGeneration extends Thread{
 		isTriangulated = false;
 		spanningTree(s);
 		
-//		try {
-//			Thread.sleep(1200);
-//		} catch (InterruptedException e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		}
+/*		try {
+			Thread.sleep(1200);
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}*/
 		isST = false;
 		createCorridor();	
 		isCorridored = true;
@@ -94,8 +94,8 @@ public class ProceduralGeneration extends Thread{
 		}
 		
 		for(int i = 0; i < NUM_ELEMENT; i++){
-			int randomX = (randomGenerator.nextInt(10)+4)*TILE_SIZE;
-			int randomY = (randomGenerator.nextInt(10)+4)*TILE_SIZE;
+			int randomX = (randomGenerator.nextInt(5)+4)*TILE_SIZE;
+			int randomY = (randomGenerator.nextInt(5)+4)*TILE_SIZE;
 			Point point = new Point(0, 0);
 			point.setRandomPositionInCircle(10*TILE_SIZE, randomGenerator);
 			point.x += 75*TILE_SIZE;
@@ -251,12 +251,12 @@ public class ProceduralGeneration extends Thread{
 				if(!Corridor.getExist(corridorList, hall, sucessor)) {
 					Corridor corridor = new Corridor(hall, sucessor);
 					corridorList.add(corridor);
-//					try {
-//						Thread.sleep(150);
-//					} catch (InterruptedException e) {
-//						// TODO Auto-generated catch block
-//						e.printStackTrace();
-//					}
+/*					try {
+						Thread.sleep(150);
+					} catch (InterruptedException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}*/
 				}
 			}
 		}
