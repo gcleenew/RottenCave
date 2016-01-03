@@ -31,13 +31,13 @@ public class Corridor {
 	}
 	
 	public void setStatus() {
-		if ( ( this.midpoint.x >= this.h1.getPosX() && this.midpoint.x <= this.h1.getPosX()+ this.h1.getLargeur()) 
-				&& ( this.midpoint.x >= this.h2.getPosX() && this.midpoint.x <= this.h2.getPosX() + this.h2.getLargeur() ) ){
+		if ( ( this.midpoint.x >= this.h1.getPosX() +1 && this.midpoint.x <= this.h1.getPosX()+ this.h1.getLargeur() -1 ) 
+				&& ( this.midpoint.x >= this.h2.getPosX() +1 && this.midpoint.x <= this.h2.getPosX() + this.h2.getLargeur() -1 ) ){
 			this.status = Status.ligneV;
 		}
 		
-		else if ( ( this.midpoint.y >= this.h1.getPosY() && this.midpoint.y <= this.h1.getPosY() + this.h1.getLongueur()) 
-				&& ( this.midpoint.y >= this.h2.getPosY() && this.midpoint.y <= this.h2.getPosY() + this.h2.getLongueur() ) ){
+		else if ( ( this.midpoint.y >= this.h1.getPosY()  +1 && this.midpoint.y <= this.h1.getPosY() + this.h1.getLongueur() -1 ) 
+				&& ( this.midpoint.y >= this.h2.getPosY() +1 && this.midpoint.y <= this.h2.getPosY() + this.h2.getLongueur() -1 )){
 			this.status = Status.ligneH;
 		}
 		else {

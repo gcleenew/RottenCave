@@ -10,6 +10,7 @@ import org.isep.rottencave.GameEnvironement.Character;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
@@ -38,6 +39,8 @@ public class GameScreen implements Screen {
 	private Character monsterCharacter;
 	private Array<Body> tmpBodies = new Array<Body>();
 	private HashSet<Sprite> tiledSprites = new HashSet<Sprite>();
+	private Music ambiance;
+	private Music gameOver;
 	
 	/**
 	 * Used for touchpad
@@ -64,6 +67,7 @@ public class GameScreen implements Screen {
 
 
 	public GameScreen(final RottenCave game, Matrice matrice) {
+		
 		this.game = game;
 		this.uiSkin = game.getUiSkin();
 		this.matriceMap = matrice;
@@ -73,6 +77,12 @@ public class GameScreen implements Screen {
 		camera = new OrthographicCamera();
 		camera.setToOrtho(false, WOLRD_WIDTH, WORLD_HEIGHT);
 		world = new World(new Vector2(0f, 0f), true);
+		MainMenuScreen.menuMusic.stop();
+		MainMenuScreen.menuMusic.dispose();
+		ambiance = Gdx.audio.newMusic(Gdx.files.internal("music/ambiance01.mp3"));
+		gameOver = Gdx.audio.newMusic(Gdx.files.internal("music/gameOver.mp3"));
+		ambiance.play();
+		ambiance.setLooping(true);
 		debugRenderer = new Box2DDebugRenderer(false, false, false, false, true, false);
 
 		
@@ -138,6 +148,8 @@ public class GameScreen implements Screen {
 		if(gameover) {
 			MainMenuScreen menuScreen = new MainMenuScreen(game);
 			game.setScreen(menuScreen);
+			gameOver.play();
+			ambiance.stop();
 			dispose();	
 		}
 	}
@@ -249,6 +261,9 @@ public class GameScreen implements Screen {
 		batch.dispose();
 		world.dispose();
 		stage.dispose();
+		ambiance.dispose();
+		gameOver.stop();
+		gameOver.dispose();
 	}
 
 }

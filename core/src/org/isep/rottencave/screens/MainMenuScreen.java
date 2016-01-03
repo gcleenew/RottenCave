@@ -6,6 +6,7 @@ import org.isep.rottencave.scene2d.ButtonRedirectListener;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
@@ -18,10 +19,13 @@ public class MainMenuScreen implements Screen {
 	private final RottenCave game;
 	private Skin uiSkin;
 	private Stage stage;
+	public static Music menuMusic;
 	
 	public MainMenuScreen(final RottenCave game) {
 		this.game= game;
 		this.uiSkin = RottenCave.getUiSkin();
+		
+		
 	}
 
 	@Override
@@ -29,6 +33,9 @@ public class MainMenuScreen implements Screen {
 		stage = new Stage(new ScreenViewport());
 		Gdx.input.setInputProcessor(stage);
 		createStaticMenu();
+		menuMusic = Gdx.audio.newMusic(Gdx.files.internal("music/fight01.mp3"));
+		menuMusic.play();
+		menuMusic.setLooping(true);
 	}
 
 	@Override
