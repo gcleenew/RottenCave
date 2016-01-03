@@ -55,7 +55,7 @@ public class GameScreen implements Screen {
 	private float starterX =  6.4f / 2;
 	private float starterY = 4.0f / 2;
 
-	private final static float DISTANCE_TO_WIN = 0.8f;
+	private final static float DISTANCE_TO_WIN = 0.7f;
 	private final static long MONSTER_POP_TIMER = 5000;
 	private long startTimer;
 	private boolean gameover = false;
@@ -78,7 +78,6 @@ public class GameScreen implements Screen {
 		generateBlocksFromMatrice();
 		
 		playerCharacter = new Character(world, starterX, starterY, true);
-//		monsterCharacter = new Character(world, starterX, starterY, false);
 
 		createTouchpad();
 	}
@@ -152,19 +151,38 @@ public class GameScreen implements Screen {
 		world.getBodies(tmpBodies);
 		for (Body curBody : tmpBodies) {
 			if (curBody.getUserData() != null && curBody.getUserData() instanceof Sprite) {
-				Sprite sprite = (Sprite) curBody.getUserData();
 				if (curBody.getType() == BodyType.StaticBody) {
-					sprite.setPosition(curBody.getPosition().x, curBody.getPosition().y);
-				} else {
-					sprite.setPosition(curBody.getPosition().x - sprite.getWidth() / 2,
-							curBody.getPosition().y - sprite.getHeight() / 2);
-				}
-				if(Math.abs(sprite.getX()-playerCharacter.getBody().getPosition().x)<DISTANCE_RENDERING && 
-						Math.abs(sprite.getY()-playerCharacter.getBody().getPosition().y)<DISTANCE_RENDERING){
-					sprite.draw(batch);
+					Sprite sprite = (Sprite) curBody.getUserData();
+					sprite.setPosition(curBody.getPosition().x, curBody.getPosition().y);	
+					if(checkDrowableDistance(sprite)){
+						sprite.draw(batch);	
+					}
 				}
 			}
 		}
+		if (monsterCharacter != null) {
+			Sprite monsterSprite = (Sprite) monsterCharacter.getBody().getUserData();
+			setSpriteCharacterPosition(monsterSprite, monsterCharacter);
+			if (checkDrowableDistance(monsterSprite)) {
+				monsterSprite.draw(batch);
+			}
+		}
+		Sprite playerSprite = (Sprite) playerCharacter.getBody().getUserData();
+		setSpriteCharacterPosition(playerSprite, playerCharacter);
+		playerSprite.draw(batch);
+	}
+
+	private void setSpriteCharacterPosition(Sprite sprite, Character character) {
+		sprite.setPosition(character.getBody().getPosition().x - sprite.getWidth() / 2,
+				character.getBody().getPosition().y - sprite.getHeight() / 2);
+	}
+
+	private boolean checkDrowableDistance(Sprite sprite) {
+		if (Math.abs(sprite.getX() - playerCharacter.getBody().getPosition().x) < DISTANCE_RENDERING
+				&& Math.abs(sprite.getY() - playerCharacter.getBody().getPosition().y) < DISTANCE_RENDERING) {
+			return true;
+		}
+		return false;
 	}
 
 	private void monsterStep(){
