@@ -7,13 +7,13 @@ import org.isep.rottencave.GlobalConfiguration;
 public class PersonalScore implements Comparable<PersonalScore> {
 	private String date;
 	private int score;
-	private int seed;
+	private Long seed;
 
 	public PersonalScore() {
 		
 	}
 	
-	public PersonalScore(Date date, int score, int seed) {
+	public PersonalScore(Date date, int score, Long seed) {
 		this.date = GlobalConfiguration.MEDIUM_DATE_FORMAT.format(date);
 		this.score = score;
 		this.seed = seed;
@@ -42,11 +42,11 @@ public class PersonalScore implements Comparable<PersonalScore> {
 		this.score = score;
 	}
 
-	public int getSeed() {
+	public Long getSeed() {
 		return seed;
 	}
 
-	public void setSeed(int seed) {
+	public void setSeed(Long seed) {
 		this.seed = seed;
 	}
 

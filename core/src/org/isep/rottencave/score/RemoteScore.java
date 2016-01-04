@@ -17,6 +17,7 @@ public class RemoteScore implements Comparable<RemoteScore> {
 	 */
 	private Long playDate;
 	private String playerName;
+	private Long seed;
 	
 	public RemoteScore() {
 	}
@@ -45,6 +46,12 @@ public class RemoteScore implements Comparable<RemoteScore> {
 	public void setPlayerName(String playerName) {
 		this.playerName = playerName;
 	}
+	public Long getSeed() {
+		return seed;
+	}
+	public void setSeed(Long seed) {
+		this.seed = seed;
+	}
 	
 	/**
 	 * Get formated date
@@ -53,6 +60,10 @@ public class RemoteScore implements Comparable<RemoteScore> {
 		return GlobalConfiguration.MEDIUM_DATE_FORMAT.format(new Date(playDate));
 	}
 	
+	public void setPlayDateFromDate(Date date) {
+		this.playDate = date.getTime();
+	}
+
 	@Override
 	public int compareTo(RemoteScore o) {
 		return score - o.getScore();

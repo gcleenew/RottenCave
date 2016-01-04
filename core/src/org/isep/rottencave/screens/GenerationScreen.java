@@ -7,7 +7,6 @@ import org.isep.rottencave.generation.Point;
 import org.isep.rottencave.generation.ProceduralGeneration;
 import org.isep.rottencave.generation.Triangle;
 
-import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.audio.Music;
@@ -29,7 +28,7 @@ public class GenerationScreen implements Screen {
 		
 		camera = new OrthographicCamera();
 		camera.setToOrtho(false, 800, 400);
-		generation = new ProceduralGeneration(null);
+		generation = new ProceduralGeneration(game.getForcedSeed());
 		shape = new ShapeRenderer();
 		
 		

@@ -23,8 +23,10 @@ public class Character {
 	private float starterY;
 	
 	private static final float PLAYER_SPEED = 1f;
+	private static final float PLAYER_RADIUS = 0.2f;
 	
 	private static final float MONSTER_SPEED = 0.5f;
+	private static final float MONSTER_RADIUS= 0.45f;
 
 	public Character(World world, float f, float g, Boolean isPlayer) {
 		this.world = world;
@@ -57,9 +59,9 @@ public class Character {
 
 		CircleShape circleShape = new CircleShape();
 		if(player){
-			circleShape.setRadius(0.3f);
+			circleShape.setRadius(PLAYER_RADIUS);
 		}else{
-			circleShape.setRadius(0.45f);
+			circleShape.setRadius(MONSTER_RADIUS);
 		}
 		
 		characterFixtureDef.shape = circleShape;

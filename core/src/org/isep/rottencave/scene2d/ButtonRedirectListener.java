@@ -17,9 +17,9 @@ public class ButtonRedirectListener extends InputListener {
 	
 	@Override
 	public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
-        Screen currenScreen = game.getScreen();
+        Screen currentScreen = game.getScreen();
         game.setScreen(redirectScreen);
-        currenScreen.dispose();
+        currentScreen.dispose();
         return true;
     }
 	

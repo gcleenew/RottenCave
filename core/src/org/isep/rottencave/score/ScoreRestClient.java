@@ -7,6 +7,8 @@ import com.badlogic.gdx.Net.HttpMethods;
 import com.badlogic.gdx.Net.HttpRequest;
 import com.badlogic.gdx.Net.HttpResponseListener;
 import com.badlogic.gdx.net.HttpRequestBuilder;
+import com.badlogic.gdx.utils.Json;
+import com.badlogic.gdx.utils.JsonWriter.OutputType;
 
 /**
  * Singleton
@@ -31,6 +33,17 @@ public class ScoreRestClient {
 	public void getScoresList(HttpResponseListener responseListener) {
 		String url = URL_BASE + "list";
 		HttpRequest request = requestBuilder.newRequest().method(HttpMethods.GET).url(url).build();
+		Gdx.net.sendHttpRequest(request, responseListener);
+	}
+	
+	public void pushRemoteScore(HttpResponseListener responseListener, RemoteScore score) {
+		String url = URL_BASE + "create";
+		Json json = new Json(OutputType.json);
+		HttpRequest request = requestBuilder.newRequest().method(HttpMethods.POST).url(url).build();
+		request.setHeader("Content-Type", "application/json");
+		request.setContent(json.toJson(score, RemoteScore.class));
+		
+		Gdx.app.debug("Push remote score ", json.toJson(score));
 		Gdx.net.sendHttpRequest(request, responseListener);
 	}
 	
