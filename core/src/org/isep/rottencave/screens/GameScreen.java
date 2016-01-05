@@ -4,6 +4,7 @@ import java.util.Date;
 import java.util.HashSet;
 
 import org.isep.matrice.Matrice;
+import org.isep.rottencave.GlobalConfiguration;
 import org.isep.rottencave.RottenCave;
 import org.isep.rottencave.GameEnvironement.BlockMap;
 import org.isep.rottencave.GameEnvironement.Character;
@@ -84,7 +85,8 @@ public class GameScreen implements Screen {
 		MainMenuScreen.menuMusic.dispose();
 		ambiance = Gdx.audio.newMusic(Gdx.files.internal("music/ambiance01.mp3"));
 		gameOver = Gdx.audio.newMusic(Gdx.files.internal("music/gameOver.mp3"));
-		ambiance.play();
+		if(GlobalConfiguration.musicOn)
+			ambiance.play();
 		ambiance.setLooping(true);
 		debugRenderer = new Box2DDebugRenderer(false, false, false, false, true, false);
 
@@ -155,7 +157,8 @@ public class GameScreen implements Screen {
 			addPersonalScore(ps);
 			
 			game.setScreen(new GameOverScreen(game, score));
-			gameOver.play();
+			if(GlobalConfiguration.musicOn)
+				gameOver.play();
 			ambiance.stop();
 			dispose();
 		}

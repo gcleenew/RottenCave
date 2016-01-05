@@ -1,5 +1,6 @@
 package org.isep.rottencave.screens;
 
+import org.isep.rottencave.GlobalConfiguration;
 import org.isep.rottencave.RottenCave;
 import org.isep.rottencave.generation.Corridor;
 import org.isep.rottencave.generation.Hall;
@@ -30,9 +31,6 @@ public class GenerationScreen implements Screen {
 		camera.setToOrtho(false, 800, 400);
 		generation = new ProceduralGeneration(game.getForcedSeed());
 		shape = new ShapeRenderer();
-		
-		
-		
 	}
 	
 	@Override
@@ -41,7 +39,8 @@ public class GenerationScreen implements Screen {
 		MainMenuScreen.menuMusic.stop();
 		MainMenuScreen.menuMusic.dispose();
 		music = Gdx.audio.newMusic(Gdx.files.internal("music/menu.mp3"));
-		music.play();
+		if(GlobalConfiguration.musicOn)
+			music.play();
 		music.setLooping(false);
 	}
 

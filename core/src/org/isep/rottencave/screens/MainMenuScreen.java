@@ -24,8 +24,6 @@ public class MainMenuScreen implements Screen {
 	public MainMenuScreen(final RottenCave game) {
 		this.game= game;
 		this.uiSkin = RottenCave.getUiSkin();
-		
-		
 	}
 
 	@Override
@@ -34,7 +32,8 @@ public class MainMenuScreen implements Screen {
 		Gdx.input.setInputProcessor(stage);
 		createStaticMenu();
 		menuMusic = Gdx.audio.newMusic(Gdx.files.internal("music/fight01.mp3"));
-		menuMusic.play();
+		if (GlobalConfiguration.musicOn)
+			menuMusic.play();
 		menuMusic.setLooping(true);
 	}
 
@@ -86,6 +85,7 @@ public class MainMenuScreen implements Screen {
 		TextButton leaderboard = new TextButton("LEADERBOARD", uiSkin);
 		leaderboard.addListener(new ButtonRedirectListener(game, new LeaderboardScreen(game)));
 		TextButton config = new TextButton("CONFIGURATION", uiSkin);
+		config.addListener(new ButtonRedirectListener(game, new ConfigurationScreen(game)));
 		Label version = new Label ("Version "+ GlobalConfiguration.VERSION, uiSkin);
 		
 		Table buttonContainer = new Table();

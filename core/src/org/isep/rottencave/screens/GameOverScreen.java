@@ -100,11 +100,11 @@ public class GameOverScreen implements Screen {
 		actorContainer.row();
 		actorContainer.add(usernameField).padRight(10);
 		actorContainer.add(submitButton);
-		actorContainer.row();
-		actorContainer.add(menuButton).padTop(10).colspan(2);
 		
 		container.add(title).padTop(10);
 		container.row();
 		container.add(actorContainer).expand();
+		container.row();
+		container.add(menuButton).bottom().left().pad(10);
 	}
 }
