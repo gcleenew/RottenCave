@@ -83,7 +83,6 @@ public class GameScreen implements Screen {
 		MainMenuScreen.menuMusic.stop();
 		MainMenuScreen.menuMusic.dispose();
 		ambiance = Gdx.audio.newMusic(Gdx.files.internal("music/ambiance01.mp3"));
-		gameOver = Gdx.audio.newMusic(Gdx.files.internal("music/gameOver.mp3"));
 		ambiance.play();
 		ambiance.setLooping(true);
 		debugRenderer = new Box2DDebugRenderer(false, false, false, false, true, false);
@@ -155,7 +154,6 @@ public class GameScreen implements Screen {
 			addPersonalScore(ps);
 			
 			game.setScreen(new GameOverScreen(game, score));
-			gameOver.play();
 			ambiance.stop();
 			dispose();
 		}
@@ -292,8 +290,6 @@ public class GameScreen implements Screen {
 		world.dispose();
 		stage.dispose();
 		ambiance.dispose();
-		gameOver.stop();
-		gameOver.dispose();
 	}
 
 }
