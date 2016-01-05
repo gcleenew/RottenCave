@@ -6,6 +6,7 @@ import java.util.List;
 
 import org.isep.rottencave.RottenCave;
 import org.isep.rottencave.scene2d.ButtonRedirectListener;
+import org.isep.rottencave.scene2d.SeedPlayGameListener;
 import org.isep.rottencave.screens.MainMenuScreen;
 
 import com.badlogic.gdx.scenes.scene2d.ui.Container;
@@ -89,7 +90,9 @@ public class PersonalLeaderBoard {
 		scoreTable.row();
 		scoreTable.add(new Container<Label>(new Label(ps.getDate(), uiSkin)));
 		scoreTable.add(new Container<Label>(new Label(""+ps.getScore(), uiSkin)));
-		scoreTable.add(new Container<Label>(new Label(""+ps.getSeed(), uiSkin)));
+		Label seedLabel = new Label(""+ps.getSeed(), uiSkin);
+		seedLabel.addListener(new SeedPlayGameListener(game, ps.getSeed()));
+		scoreTable.add(new Container<Label>(seedLabel));
 	}
 
 	public Table getContainer() {

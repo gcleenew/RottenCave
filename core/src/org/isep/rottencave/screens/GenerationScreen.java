@@ -25,11 +25,21 @@ public class GenerationScreen implements Screen {
 	private Music music;
 	
 	public GenerationScreen(final RottenCave game) {
-		this.game=game;
-		
+		this.game = game;
+		instantiateGenerationScreen();
+		generation = new ProceduralGeneration(GlobalConfiguration.configuredSeed);
+	}
+	
+	public GenerationScreen(final RottenCave game, Long forcedSeed) {
+		this.game = game;
+		instantiateGenerationScreen();
+		generation = new ProceduralGeneration(forcedSeed);
+	}
+	
+	private void instantiateGenerationScreen() {
 		camera = new OrthographicCamera();
 		camera.setToOrtho(false, 800, 400);
-		generation = new ProceduralGeneration(GlobalConfiguration.configuredSeed);
+		
 		shape = new ShapeRenderer();
 		
 		music = Gdx.audio.newMusic(Gdx.files.internal("music/menu.mp3"));

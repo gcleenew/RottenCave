@@ -37,7 +37,7 @@ public class LeaderboardScreen implements Screen {
 	private void refreshLeaderboard () {
 		Table scoreTable = leaderBoard.cleanScoreTable();
 		ScoreRestClient client = ScoreRestClient.getScoreRestClient();
-		ScoreListProcessor processor = new FillTableProcessor(scoreTable, RottenCave.getUiSkin());
+		ScoreListProcessor processor = new FillTableProcessor(game, scoreTable, RottenCave.getUiSkin());
 		ListListener listListener = new ListListener(processor, stage);
 		client.getScoresList(listListener);
 	}

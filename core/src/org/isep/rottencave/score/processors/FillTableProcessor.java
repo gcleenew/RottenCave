@@ -4,6 +4,8 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
+import org.isep.rottencave.RottenCave;
+import org.isep.rottencave.scene2d.SeedPlayGameListener;
 import org.isep.rottencave.score.RemoteScore;
 
 import com.badlogic.gdx.Gdx;
@@ -19,10 +21,12 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
  *
  */
 public class FillTableProcessor implements ScoreListProcessor {
+	private final RottenCave game;
 	private Table scoreTable;
 	private Skin skin;
 
-	public FillTableProcessor(Table scoreTable, Skin skin) {
+	public FillTableProcessor(final RottenCave game, Table scoreTable, Skin skin) {
+		this.game = game;
 		this.scoreTable = scoreTable;
 		this.skin = skin;
 	}
@@ -54,7 +58,9 @@ public class FillTableProcessor implements ScoreListProcessor {
 						scoreTable.add(new Container<Label>(new Label(remoteScore.getPlayerName(), skin)));
 						scoreTable.add(new Container<Label>(new Label(remoteScore.getFormatedPlayDate(), skin)));
 						scoreTable.add(new Container<Label>(new Label("" + remoteScore.getScore(), skin)));
-						scoreTable.add(new Container<Label>(new Label("" + remoteScore.getSeed(), skin)));
+						Label seedLabel = new Label("" + remoteScore.getSeed(), skin);
+						seedLabel.addListener(new SeedPlayGameListener(game, remoteScore.getSeed()));
+						scoreTable.add(new Container<Label>(seedLabel));
 					}
 				}
 			});
