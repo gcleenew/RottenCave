@@ -1,6 +1,7 @@
 package org.isep.rottencave.screens;
 
 import org.isep.rottencave.RottenCave;
+import org.isep.rottencave.scene2d.SeedPlayGameDialog;
 import org.isep.rottencave.score.PersonalLeaderBoard;
 
 import com.badlogic.gdx.Gdx;
@@ -26,6 +27,8 @@ public class PersonalRankScreen implements Screen {
 		PersonalLeaderBoard leaderBoard = new PersonalLeaderBoard(game, uiSkin);
 		stage.addActor(leaderBoard.getContainer());
 		Gdx.input.setInputProcessor(stage);
+		SeedPlayGameDialog dialog = new SeedPlayGameDialog("Ok", RottenCave.getUiSkin());
+		dialog.show(stage);
 	}
 
 	@Override
