@@ -10,6 +10,7 @@ import org.isep.rottencave.score.RemoteScore;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
@@ -27,6 +28,7 @@ public class GameOverScreen implements Screen {
 	private RemoteScore remoteScore;
 	private TextField usernameField;
 	private TextButton submitButton;
+	private Music music;
 	
 	public GameOverScreen(final RottenCave game, int score) {
 		this.game = game;
@@ -35,6 +37,10 @@ public class GameOverScreen implements Screen {
 		remoteScore.setScore(score);
 		remoteScore.setPlayDateFromDate(new Date());
 		remoteScore.setSeed(ProceduralGeneration.getLastSeedUsed());
+		
+		music = Gdx.audio.newMusic(Gdx.files.internal("music/gameOver.mp3"));
+		music.play();
+		music.setLooping(false);
 	}
 	
 	@Override
@@ -78,6 +84,8 @@ public class GameOverScreen implements Screen {
 
 	@Override
 	public void dispose() {
+		music.stop();
+		music.dispose();
 		stage.dispose();
 	}
 

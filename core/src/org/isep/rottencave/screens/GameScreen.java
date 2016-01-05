@@ -8,6 +8,7 @@ import org.isep.rottencave.GlobalConfiguration;
 import org.isep.rottencave.RottenCave;
 import org.isep.rottencave.GameEnvironement.BlockMap;
 import org.isep.rottencave.GameEnvironement.Character;
+import org.isep.rottencave.GameEnvironement.PathFinding;
 import org.isep.rottencave.generation.ProceduralGeneration;
 import org.isep.rottencave.score.PersonalScore;
 import org.isep.rottencave.score.PersonalScoreDAO;
@@ -16,6 +17,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.audio.Music;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.Sprite;
@@ -32,6 +34,9 @@ import com.badlogic.gdx.scenes.scene2d.ui.Touchpad;
 import com.badlogic.gdx.scenes.scene2d.ui.Touchpad.TouchpadStyle;
 import com.badlogic.gdx.utils.Array;
 
+import box2dLight.PointLight;
+import box2dLight.RayHandler;
+
 public class GameScreen implements Screen {
 	final RottenCave game;
 
@@ -45,7 +50,9 @@ public class GameScreen implements Screen {
 	private HashSet<Sprite> tiledSprites = new HashSet<Sprite>();
 	private Music ambiance;
 	private Music gameOver;
-	
+	private RayHandler rayHandler;
+	private PointLight characterLight;
+	private PointLight stickLight;
 	/**
 	 * Used for touchpad
 	 */
@@ -63,13 +70,13 @@ public class GameScreen implements Screen {
 	private float starterX =  6.4f / 2;
 	private float starterY = 4.0f / 2;
 
-	private final static float DISTANCE_TO_WIN = 0.7f;
+	private final static float DISTANCE_TO_WIN = 0.4f;
 	private final static long MONSTER_POP_TIMER = 5000;
 	private long startTimer;
 	private boolean gameover = false;
+
+	private PathFinding pathFinding;
 	
-
-
 	public GameScreen(final RottenCave game, Matrice matrice) {
 		
 		this.game = game;
@@ -90,11 +97,17 @@ public class GameScreen implements Screen {
 		ambiance.setLooping(true);
 		debugRenderer = new Box2DDebugRenderer(false, false, false, false, true, false);
 
+		rayHandler = new RayHandler(world);
 		
 		generateBlocksFromMatrice();
 		
 		playerCharacter = new Character(world, starterX, starterY, true);
 
+		characterLight = new PointLight(rayHandler, 10, new Color(1,0.4f,0.1f,0.7f), 4f, starterX, starterY);
+		characterLight.attachToBody(playerCharacter.getBody(), 0f,0f); 
+		
+
+		
 		createTouchpad();
 	}
 	
@@ -127,11 +140,11 @@ public class GameScreen implements Screen {
 
 	@Override
 	public void render(float delta) {
+		
 		Gdx.gl.glClearColor(0, 0, 0, 1);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-
 		debugRenderer.render(world, camera.combined);
-
+		
 		// use this to center camera on player.
 		camera.position.set(playerCharacter.getBody().getPosition(), 0f);
 		camera.update();
@@ -145,9 +158,22 @@ public class GameScreen implements Screen {
 		checkControl();
 		monsterStep();
 		world.step(1 / 60f, 1, 1);
-
+		
+		rayHandler.setCombinedMatrix(camera);
+		rayHandler.updateAndRender();
+		float distance = characterLight.getDistance() + 0.3f * (float) Math.sin(System.currentTimeMillis()/2);
+		if(distance >= 5f) {
+			distance = 5f;
+		}
+		else if (distance <= 3f) {
+			distance = 3f;
+		}
+		characterLight.setDistance(distance);
+		
 		stage.act(delta);
 		stage.draw();
+		
+
 		
 		if(gameover) {
 
@@ -197,8 +223,13 @@ public class GameScreen implements Screen {
 	}
 
 	private void setSpriteCharacterPosition(Sprite sprite, Character character) {
-		sprite.setPosition(character.getBody().getPosition().x - sprite.getWidth() / 2,
-				character.getBody().getPosition().y - sprite.getHeight() / 2);
+		if (character == monsterCharacter) {
+			sprite.setPosition(character.getBody().getPosition().x - sprite.getWidth() / 2,
+					character.getBody().getPosition().y - sprite.getHeight() / 4);
+		} else {
+			sprite.setPosition(character.getBody().getPosition().x - sprite.getWidth() / 2,
+					character.getBody().getPosition().y - sprite.getHeight() / 2);
+		}
 	}
 
 	private boolean checkDrowableDistance(Sprite sprite) {
@@ -221,15 +252,17 @@ public class GameScreen implements Screen {
 				System.out.println("GAME OVER");
 				gameover=true;
 			}
-			double theta = Math.atan2(playerPos.y - monsterPos.y, playerPos.x - monsterPos.x);
-			if (theta < 0) {
-				theta += Math.PI * 2;
-			}
-			monsterCharacter.setMoveAngle((float) theta);
 			
-		}else if(popedTime>MONSTER_POP_TIMER){		
-			monsterCharacter = new Character(world, starterX, starterY, false);	 
+			monsterCharacter.stepToPlayer();
+		}else if(popedTime>MONSTER_POP_TIMER){
+			createMonster();
 		}
+	}
+	
+	private void createMonster(){
+		monsterCharacter = new Character(world, starterX, starterY, false);
+		pathFinding = new PathFinding(monsterCharacter, playerCharacter, matriceMap);
+		pathFinding.start();
 	}
 	
 	private void checkControl() {
@@ -294,9 +327,9 @@ public class GameScreen implements Screen {
 		batch.dispose();
 		world.dispose();
 		stage.dispose();
+		rayHandler.dispose();
 		ambiance.dispose();
-		gameOver.stop();
-		gameOver.dispose();
+		pathFinding.stop();
 	}
 
 }
