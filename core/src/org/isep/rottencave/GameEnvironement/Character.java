@@ -26,8 +26,8 @@ public class Character {
 	private static final float PLAYER_RADIUS = 0.2f;
 	
 	private static final float MONSTER_SPEED = 0.5f;
-	private static final float MONSTER_RADIUS= 0.45f;
-
+	private static final float MONSTER_RADIUS= 0.2f;
+	
 	public Character(World world, float f, float g, Boolean isPlayer) {
 		this.world = world;
 		this.player = isPlayer;
