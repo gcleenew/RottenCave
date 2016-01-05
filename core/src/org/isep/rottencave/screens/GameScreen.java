@@ -7,6 +7,7 @@ import org.isep.matrice.Matrice;
 import org.isep.rottencave.RottenCave;
 import org.isep.rottencave.GameEnvironement.BlockMap;
 import org.isep.rottencave.GameEnvironement.Character;
+import org.isep.rottencave.GameEnvironement.PathFinding;
 import org.isep.rottencave.generation.ProceduralGeneration;
 import org.isep.rottencave.score.PersonalScore;
 import org.isep.rottencave.score.PersonalScoreDAO;
@@ -43,7 +44,6 @@ public class GameScreen implements Screen {
 	private Array<Body> tmpBodies = new Array<Body>();
 	private HashSet<Sprite> tiledSprites = new HashSet<Sprite>();
 	private Music ambiance;
-	private Music gameOver;
 	
 	/**
 	 * Used for touchpad
@@ -227,9 +227,14 @@ public class GameScreen implements Screen {
 			}
 			monsterCharacter.setMoveAngle((float) theta);
 			
-		}else if(popedTime>MONSTER_POP_TIMER){		
-			monsterCharacter = new Character(world, starterX, starterY, false);	 
+		}else if(popedTime>MONSTER_POP_TIMER){
+			createMonster();
 		}
+	}
+	
+	private void createMonster(){
+		monsterCharacter = new Character(world, starterX, starterY, false);
+		PathFinding pathFinding = new PathFinding(monsterCharacter, playerCharacter, matriceMap);
 	}
 	
 	private void checkControl() {
