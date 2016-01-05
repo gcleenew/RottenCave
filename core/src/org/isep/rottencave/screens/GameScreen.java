@@ -66,6 +66,8 @@ public class GameScreen implements Screen {
 	private final static long MONSTER_POP_TIMER = 5000;
 	private long startTimer;
 	private boolean gameover = false;
+
+	private PathFinding pathFinding;
 	
 
 
@@ -230,7 +232,7 @@ public class GameScreen implements Screen {
 	
 	private void createMonster(){
 		monsterCharacter = new Character(world, starterX, starterY, false);
-		PathFinding pathFinding = new PathFinding(monsterCharacter, playerCharacter, matriceMap);
+		pathFinding = new PathFinding(monsterCharacter, playerCharacter, matriceMap);
 		pathFinding.start();
 	}
 	
@@ -297,6 +299,7 @@ public class GameScreen implements Screen {
 		world.dispose();
 		stage.dispose();
 		ambiance.dispose();
+		pathFinding.stop();
 	}
 
 }
