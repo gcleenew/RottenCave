@@ -221,12 +221,8 @@ public class GameScreen implements Screen {
 				System.out.println("GAME OVER");
 				gameover=true;
 			}
-			double theta = Math.atan2(playerPos.y - monsterPos.y, playerPos.x - monsterPos.x);
-			if (theta < 0) {
-				theta += Math.PI * 2;
-			}
-			monsterCharacter.setMoveAngle((float) theta);
 			
+			monsterCharacter.stepToPlayer();
 		}else if(popedTime>MONSTER_POP_TIMER){
 			createMonster();
 		}
@@ -235,6 +231,7 @@ public class GameScreen implements Screen {
 	private void createMonster(){
 		monsterCharacter = new Character(world, starterX, starterY, false);
 		PathFinding pathFinding = new PathFinding(monsterCharacter, playerCharacter, matriceMap);
+		pathFinding.start();
 	}
 	
 	private void checkControl() {
