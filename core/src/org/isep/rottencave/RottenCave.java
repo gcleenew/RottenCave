@@ -5,17 +5,20 @@ import org.isep.rottencave.screens.MainMenuScreen;
 import com.badlogic.gdx.Application;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 
 public class RottenCave extends Game {
 	private static Skin uiSkin;
+	private static Music menuMusic;
 	
 	@Override
 	public void create () {
 		Gdx.app.setLogLevel(Application.LOG_DEBUG);	
 		createSkin();
-		
+		menuMusic = Gdx.audio.newMusic(Gdx.files.internal("music/fight01.mp3"));
+		menuMusic.setLooping(true);
 		this.setScreen(new MainMenuScreen(this));
 	}
 
@@ -28,6 +31,7 @@ public class RottenCave extends Game {
 	public void dispose() {
 		super.dispose();
 		uiSkin.dispose();
+		menuMusic.dispose();
 	}
 	
 	private void createSkin() {
@@ -38,5 +42,9 @@ public class RottenCave extends Game {
 
 	public static Skin getUiSkin() {
 		return uiSkin;
+	}
+
+	public static Music getMenuMusic() {
+		return menuMusic;
 	}
 }

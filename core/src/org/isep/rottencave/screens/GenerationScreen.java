@@ -31,17 +31,18 @@ public class GenerationScreen implements Screen {
 		camera.setToOrtho(false, 800, 400);
 		generation = new ProceduralGeneration(GlobalConfiguration.configuredSeed);
 		shape = new ShapeRenderer();
+		
+		music = Gdx.audio.newMusic(Gdx.files.internal("music/menu.mp3"));
+		music.setLooping(false);
 	}
 	
 	@Override
 	public void show() {
 		generation.start();
-		MainMenuScreen.menuMusic.stop();
-		MainMenuScreen.menuMusic.dispose();
-		music = Gdx.audio.newMusic(Gdx.files.internal("music/menu.mp3"));
+		
+		RottenCave.getMenuMusic().stop();
 		if(GlobalConfiguration.musicOn)
 			music.play();
-		music.setLooping(false);
 	}
 
 	@Override
@@ -118,14 +119,12 @@ public class GenerationScreen implements Screen {
 
 	@Override
 	public void hide() {
-		// TODO Auto-generated method stub
-
+		music.stop();
 	}
 
 	@Override
 	public void dispose() {
 		shape.dispose();
-		music.stop();
 		music.dispose();
 	}
 

@@ -70,7 +70,6 @@ public class ConfigurationScreen implements Screen {
 	@Override
 	public void dispose() {
 		stage.dispose();
-
 	}
 
 	private void createStaticMenu() {

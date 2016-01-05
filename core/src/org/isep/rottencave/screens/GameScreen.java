@@ -49,7 +49,6 @@ public class GameScreen implements Screen {
 	private Array<Body> tmpBodies = new Array<Body>();
 	private HashSet<Sprite> tiledSprites = new HashSet<Sprite>();
 	private Music ambiance;
-	private Music gameOver;
 	private RayHandler rayHandler;
 	private PointLight characterLight;
 	private PointLight stickLight;
@@ -80,21 +79,17 @@ public class GameScreen implements Screen {
 	public GameScreen(final RottenCave game, Matrice matrice) {
 		
 		this.game = game;
-		this.uiSkin = game.getUiSkin();
+		this.uiSkin = RottenCave.getUiSkin();
 		this.matriceMap = matrice;
 		this.textureAtlas = new TextureAtlas(Gdx.files.internal("atlastexture/packedTexture.atlas"));
+		ambiance = Gdx.audio.newMusic(Gdx.files.internal("music/ambiance01.mp3"));
+		ambiance.setLooping(true);
 		
 		batch = new SpriteBatch();
 		camera = new OrthographicCamera();
 		camera.setToOrtho(false, WOLRD_WIDTH, WORLD_HEIGHT);
 		world = new World(new Vector2(0f, 0f), true);
-		MainMenuScreen.menuMusic.stop();
-		MainMenuScreen.menuMusic.dispose();
-		ambiance = Gdx.audio.newMusic(Gdx.files.internal("music/ambiance01.mp3"));
-		gameOver = Gdx.audio.newMusic(Gdx.files.internal("music/gameOver.mp3"));
-		if(GlobalConfiguration.musicOn)
-			ambiance.play();
-		ambiance.setLooping(true);
+		
 		debugRenderer = new Box2DDebugRenderer(false, false, false, false, true, false);
 
 		rayHandler = new RayHandler(world);
@@ -173,19 +168,13 @@ public class GameScreen implements Screen {
 		stage.act(delta);
 		stage.draw();
 		
-
-		
 		if(gameover) {
-
 			int score = (int) (System.currentTimeMillis() - startTimer)/1000;
 			Gdx.app.debug("Game Over", "Score : "+score);
 			PersonalScore ps = new PersonalScore(new Date(), score, ProceduralGeneration.getLastSeedUsed());
 			addPersonalScore(ps);
 			
 			game.setScreen(new GameOverScreen(game, score));
-			if(GlobalConfiguration.musicOn)
-				gameOver.play();
-			ambiance.stop();
 			dispose();
 		}
 	}
@@ -294,6 +283,8 @@ public class GameScreen implements Screen {
 
 	@Override
 	public void show() {
+		if(GlobalConfiguration.musicOn)
+			ambiance.play();
 		startTimer = System.currentTimeMillis();
 		Gdx.input.setInputProcessor(stage);
 	}
@@ -317,8 +308,7 @@ public class GameScreen implements Screen {
 
 	@Override
 	public void hide() {
-		// TODO Auto-generated method stub
-
+		ambiance.stop();
 	}
 
 	@Override

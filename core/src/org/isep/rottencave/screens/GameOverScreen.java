@@ -5,6 +5,7 @@ import java.util.Date;
 import org.isep.rottencave.RottenCave;
 import org.isep.rottencave.generation.ProceduralGeneration;
 import org.isep.rottencave.scene2d.ButtonRedirectListener;
+import org.isep.rottencave.scene2d.SimpleDialogMessage;
 import org.isep.rottencave.scene2d.SubmitScoreListener;
 import org.isep.rottencave.score.RemoteScore;
 
@@ -12,7 +13,9 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Dialog;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
@@ -39,7 +42,6 @@ public class GameOverScreen implements Screen {
 		remoteScore.setSeed(ProceduralGeneration.getLastSeedUsed());
 		
 		music = Gdx.audio.newMusic(Gdx.files.internal("music/gameOver.mp3"));
-		music.play();
 		music.setLooping(false);
 	}
 	
@@ -48,6 +50,7 @@ public class GameOverScreen implements Screen {
 		stage = new Stage(new ScreenViewport());
 		Gdx.input.setInputProcessor(stage);
 		createStaticMenu();
+		music.play();
 	}
 
 	@Override
@@ -62,6 +65,13 @@ public class GameOverScreen implements Screen {
 	@Override
 	public void resize(int width, int height) {
 		stage.getViewport().update(width, height, true);
+		
+		// Resize dialog if exist
+		for (Actor actor : stage.getActors()) {
+			if (actor.getClass() == Dialog.class) {
+				SimpleDialogMessage.centerDialog((Dialog) actor);
+			}
+		}
 	}
 
 	@Override
@@ -78,13 +88,12 @@ public class GameOverScreen implements Screen {
 
 	@Override
 	public void hide() {
-		// TODO Auto-generated method stub
+		music.stop();
 		
 	}
 
 	@Override
 	public void dispose() {
-		music.stop();
 		music.dispose();
 		stage.dispose();
 	}
