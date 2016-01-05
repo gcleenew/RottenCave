@@ -12,10 +12,14 @@ import org.isep.rottencave.generation.ProceduralGeneration;
 import org.isep.rottencave.score.PersonalScore;
 import org.isep.rottencave.score.PersonalScoreDAO;
 
+import box2dLight.PointLight;
+import box2dLight.RayHandler;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.audio.Music;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.Sprite;
@@ -44,7 +48,9 @@ public class GameScreen implements Screen {
 	private Array<Body> tmpBodies = new Array<Body>();
 	private HashSet<Sprite> tiledSprites = new HashSet<Sprite>();
 	private Music ambiance;
-	
+	private RayHandler rayHandler;
+	private PointLight characterLight;
+	private PointLight stickLight;
 	/**
 	 * Used for touchpad
 	 */
@@ -69,6 +75,8 @@ public class GameScreen implements Screen {
 
 	private PathFinding pathFinding;
 	
+	
+	
 
 
 	public GameScreen(final RottenCave game, Matrice matrice) {
@@ -89,11 +97,17 @@ public class GameScreen implements Screen {
 		ambiance.setLooping(true);
 		debugRenderer = new Box2DDebugRenderer(false, false, false, false, true, false);
 
+		rayHandler = new RayHandler(world);
 		
 		generateBlocksFromMatrice();
 		
 		playerCharacter = new Character(world, starterX, starterY, true);
 
+		characterLight = new PointLight(rayHandler, 10, new Color(1,0.4f,0.1f,0.7f), 4f, starterX, starterY);
+		characterLight.attachToBody(playerCharacter.getBody(), 0f,0f); 
+		
+
+		
 		createTouchpad();
 	}
 	
@@ -126,11 +140,11 @@ public class GameScreen implements Screen {
 
 	@Override
 	public void render(float delta) {
+		
 		Gdx.gl.glClearColor(0, 0, 0, 1);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-
 		debugRenderer.render(world, camera.combined);
-
+		
 		// use this to center camera on player.
 		camera.position.set(playerCharacter.getBody().getPosition(), 0f);
 		camera.update();
@@ -144,9 +158,22 @@ public class GameScreen implements Screen {
 		checkControl();
 		monsterStep();
 		world.step(1 / 60f, 1, 1);
-
+		
+		rayHandler.setCombinedMatrix(camera);
+		rayHandler.updateAndRender();
+		float distance = characterLight.getDistance() + 0.3f * (float) Math.sin(System.currentTimeMillis()/2);
+		if(distance >= 5f) {
+			distance = 5f;
+		}
+		else if (distance <= 3f) {
+			distance = 3f;
+		}
+		characterLight.setDistance(distance);
+		
 		stage.act(delta);
 		stage.draw();
+		
+
 		
 		if(gameover) {
 
@@ -298,6 +325,7 @@ public class GameScreen implements Screen {
 		batch.dispose();
 		world.dispose();
 		stage.dispose();
+		rayHandler.dispose();
 		ambiance.dispose();
 		pathFinding.stop();
 	}
