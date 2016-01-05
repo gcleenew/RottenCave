@@ -9,4 +9,5 @@ public class GlobalConfiguration {
 	public static final DateFormat MEDIUM_DATE_FORMAT = DateFormat.getDateInstance(DateFormat.MEDIUM);
 	
 	public static boolean musicOn = true;
+	public static Long configuredSeed;
 }

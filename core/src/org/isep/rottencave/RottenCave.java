@@ -10,7 +10,6 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 
 public class RottenCave extends Game {
 	private static Skin uiSkin;
-	private Long forcedSeed = null;
 	
 	@Override
 	public void create () {
@@ -39,13 +38,5 @@ public class RottenCave extends Game {
 
 	public static Skin getUiSkin() {
 		return uiSkin;
-	}
-
-	public Long getForcedSeed() {
-		return forcedSeed;
-	}
-
-	public void setForcedSeed(Long forcedSeed) {
-		this.forcedSeed = forcedSeed;
 	}
 }

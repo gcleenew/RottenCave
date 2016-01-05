@@ -90,6 +90,8 @@ public class ProceduralGeneration extends Thread{
 		Random randomGenerator = new Random();
 		if(seed == null) {
 			seed = (long) (randomGenerator.nextFloat() * 100000000);
+		} else {
+			Gdx.app.debug("Configured seed used ", ""+seed);
 		}
 
 		lastSeedUsed = seed;

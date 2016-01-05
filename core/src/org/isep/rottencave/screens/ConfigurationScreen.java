@@ -3,17 +3,18 @@ package org.isep.rottencave.screens;
 import org.isep.rottencave.GlobalConfiguration;
 import org.isep.rottencave.RottenCave;
 import org.isep.rottencave.scene2d.ButtonRedirectListener;
+import org.isep.rottencave.scene2d.MusicCheckBoxListener;
+import org.isep.rottencave.scene2d.SaveConfigListener;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.scenes.scene2d.InputEvent;
-import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.CheckBox;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 
@@ -80,28 +81,17 @@ public class ConfigurationScreen implements Screen {
 
 		Label title = new Label("Configuration", uiSkin, "title");
 		Label musicLabel = new Label("Musique :", uiSkin);
+		
 		CheckBox musicCheckBox = new CheckBox("", uiSkin);
 		musicCheckBox.setChecked(GlobalConfiguration.musicOn);
-		musicCheckBox.addListener(new InputListener(){
-		 	public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
- 		 		GlobalConfiguration.musicOn = !GlobalConfiguration.musicOn;
- 		 		if(GlobalConfiguration.musicOn){
- 		 			MainMenuScreen.menuMusic.play();
- 		 		} else {
- 		 			MainMenuScreen.menuMusic.stop();
- 		 		}
- 		 		String message = (GlobalConfiguration.musicOn) ? "On" : "Off";
- 		 		Gdx.app.debug("Change music conf", message);
- 		 		return true;
- 		 	}
- 		 
- 		 	public void touchUp (InputEvent event, float x, float y, int pointer, int button) {
- 		 		
- 		 	}
-		});
+		musicCheckBox.addListener(new MusicCheckBoxListener());
 		
 		Label seedLabel = new Label("Seed :", uiSkin);
-		TextField seedField = new TextField("", uiSkin);		
+		String configuredSeed = (GlobalConfiguration.configuredSeed == null) ? null : ""+GlobalConfiguration.configuredSeed;
+		TextField seedField = new TextField(configuredSeed, uiSkin);
+		TextButton saveButton = new TextButton("Sauvegarder", uiSkin);
+		saveButton.addListener(new SaveConfigListener(seedField, stage));
+		
 		Label returnLabel = new Label("Menu", uiSkin);
 		returnLabel.addListener(new ButtonRedirectListener(game, new MainMenuScreen(game)));
 		
@@ -111,6 +101,8 @@ public class ConfigurationScreen implements Screen {
 		actorContainer.row().padTop(10);
 		actorContainer.add(seedLabel).padRight(10);
 		actorContainer.add(seedField);
+		actorContainer.row().padTop(10);
+		actorContainer.add(saveButton).colspan(2);
 		
 		container.add(title).padTop(10);
 		container.row();
