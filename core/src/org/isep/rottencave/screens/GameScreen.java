@@ -194,8 +194,13 @@ public class GameScreen implements Screen {
 	}
 
 	private void setSpriteCharacterPosition(Sprite sprite, Character character) {
-		sprite.setPosition(character.getBody().getPosition().x - sprite.getWidth() / 2,
-				character.getBody().getPosition().y - sprite.getHeight() / 2);
+		if (character == monsterCharacter) {
+			sprite.setPosition(character.getBody().getPosition().x - sprite.getWidth() / 2,
+					character.getBody().getPosition().y - sprite.getHeight() / 4);
+		} else {
+			sprite.setPosition(character.getBody().getPosition().x - sprite.getWidth() / 2,
+					character.getBody().getPosition().y - sprite.getHeight() / 2);
+		}
 	}
 
 	private boolean checkDrowableDistance(Sprite sprite) {
