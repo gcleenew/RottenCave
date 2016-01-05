@@ -62,7 +62,7 @@ public class GameScreen implements Screen {
 	private float starterX =  6.4f / 2;
 	private float starterY = 4.0f / 2;
 
-	private final static float DISTANCE_TO_WIN = 0.7f;
+	private final static float DISTANCE_TO_WIN = 0.4f;
 	private final static long MONSTER_POP_TIMER = 5000;
 	private long startTimer;
 	private boolean gameover = false;
