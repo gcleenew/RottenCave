@@ -1,6 +1,7 @@
 package org.isep.rottencave.screens;
 
 import org.isep.rottencave.RottenCave;
+import org.isep.rottencave.scene2d.SeedPlayGameDialog;
 import org.isep.rottencave.scene2d.SimpleDialogMessage;
 import org.isep.rottencave.score.BasicLeaderboard;
 import org.isep.rottencave.score.ScoreRestClient;
@@ -36,8 +37,9 @@ public class LeaderboardScreen implements Screen {
 	
 	private void refreshLeaderboard () {
 		Table scoreTable = leaderBoard.cleanScoreTable();
+		SeedPlayGameDialog dialog = new SeedPlayGameDialog(game, "Confirmation", stage, RottenCave.getUiSkin());
 		ScoreRestClient client = ScoreRestClient.getScoreRestClient();
-		ScoreListProcessor processor = new FillTableProcessor(game, scoreTable, RottenCave.getUiSkin());
+		ScoreListProcessor processor = new FillTableProcessor(game, scoreTable, RottenCave.getUiSkin(), dialog);
 		ListListener listListener = new ListListener(processor, stage);
 		client.getScoresList(listListener);
 	}

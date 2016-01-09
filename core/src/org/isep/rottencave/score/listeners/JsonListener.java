@@ -16,7 +16,7 @@ import com.badlogic.gdx.utils.Json;
  */
 public class JsonListener implements HttpResponseListener {
 	protected static final String DIALOG_TITLE = "Erreur de connexion";
-	protected static final String DIALOG_MESSAGE = "Les donn�es ne sont pas accessible\nVeuillez r�essayer plus tard";
+	protected static final String DIALOG_MESSAGE = "Les donnees ne sont pas accessible\nVeuillez reessayer plus tard";
 	
 	protected Json json;
 	protected Stage stage;

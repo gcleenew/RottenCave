@@ -6,7 +6,8 @@ import java.util.List;
 
 import org.isep.rottencave.RottenCave;
 import org.isep.rottencave.scene2d.ButtonRedirectListener;
-import org.isep.rottencave.scene2d.SeedPlayGameListener;
+import org.isep.rottencave.scene2d.SeedPlayGameDialog;
+import org.isep.rottencave.scene2d.ShowSeedPlayGameDialogListener;
 import org.isep.rottencave.screens.MainMenuScreen;
 
 import com.badlogic.gdx.scenes.scene2d.ui.Container;
@@ -24,10 +25,19 @@ public class PersonalLeaderBoard {
 	private Table container;
 	private Table scoreTable;
 	private Skin uiSkin;
+	private SeedPlayGameDialog confirmSeedDialog;
 	
 	public PersonalLeaderBoard(RottenCave game, Skin skin) {
 		this.game = game;
 		this.uiSkin = skin;
+		createStaticContent();
+		fillLeaderBoard();
+	}
+	
+	public PersonalLeaderBoard(RottenCave game, Skin skin, SeedPlayGameDialog confirmSeedDialog) {
+		this.game = game;
+		this.uiSkin = skin;
+		this.confirmSeedDialog = confirmSeedDialog;
 		createStaticContent();
 		fillLeaderBoard();
 	}
@@ -91,7 +101,8 @@ public class PersonalLeaderBoard {
 		scoreTable.add(new Container<Label>(new Label(ps.getDate(), uiSkin)));
 		scoreTable.add(new Container<Label>(new Label(""+ps.getScore(), uiSkin)));
 		Label seedLabel = new Label(""+ps.getSeed(), uiSkin);
-		seedLabel.addListener(new SeedPlayGameListener(game, ps.getSeed()));
+		if (confirmSeedDialog != null)
+			seedLabel.addListener(new ShowSeedPlayGameDialogListener(confirmSeedDialog, ps.getSeed()));
 		scoreTable.add(new Container<Label>(seedLabel));
 	}
 

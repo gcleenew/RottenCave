@@ -108,7 +108,7 @@ public class GameOverScreen implements Screen {
 		Label scoreLabel = new Label ("Score : "+ remoteScore.getScore(), uiSkin);
 		usernameField = new TextField("", uiSkin);
 		submitButton = new TextButton("Envoyer", uiSkin);
-		submitButton.addListener(new SubmitScoreListener(usernameField, remoteScore));
+		submitButton.addListener(new SubmitScoreListener(usernameField, remoteScore, stage));
 		TextButton menuButton = new TextButton("Quitter", uiSkin);
 		menuButton.addListener(new ButtonRedirectListener(game, new MainMenuScreen(game)));
 				

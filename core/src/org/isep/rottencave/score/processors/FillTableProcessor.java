@@ -5,7 +5,8 @@ import java.util.Comparator;
 import java.util.List;
 
 import org.isep.rottencave.RottenCave;
-import org.isep.rottencave.scene2d.SeedPlayGameListener;
+import org.isep.rottencave.scene2d.SeedPlayGameDialog;
+import org.isep.rottencave.scene2d.ShowSeedPlayGameDialogListener;
 import org.isep.rottencave.score.RemoteScore;
 
 import com.badlogic.gdx.Gdx;
@@ -24,12 +25,19 @@ public class FillTableProcessor implements ScoreListProcessor {
 	private final RottenCave game;
 	private Table scoreTable;
 	private Skin skin;
+	private SeedPlayGameDialog confirmSeedDialog;
 
 	public FillTableProcessor(final RottenCave game, Table scoreTable, Skin skin) {
 		this.game = game;
 		this.scoreTable = scoreTable;
 		this.skin = skin;
 	}
+	
+	public FillTableProcessor(final RottenCave game, Table scoreTable, Skin skin, SeedPlayGameDialog confirmSeedDialog) {
+		this(game, scoreTable, skin);
+		this.confirmSeedDialog = confirmSeedDialog;
+	}
+	
 
 	@Override
 	public void processList(final List<RemoteScore> scoresList) {
@@ -59,7 +67,8 @@ public class FillTableProcessor implements ScoreListProcessor {
 						scoreTable.add(new Container<Label>(new Label(remoteScore.getFormatedPlayDate(), skin)));
 						scoreTable.add(new Container<Label>(new Label("" + remoteScore.getScore(), skin)));
 						Label seedLabel = new Label("" + remoteScore.getSeed(), skin);
-						seedLabel.addListener(new SeedPlayGameListener(game, remoteScore.getSeed()));
+						if (confirmSeedDialog != null)
+							seedLabel.addListener(new ShowSeedPlayGameDialogListener(confirmSeedDialog, remoteScore.getSeed()));
 						scoreTable.add(new Container<Label>(seedLabel));
 					}
 				}

@@ -24,11 +24,11 @@ public class PersonalRankScreen implements Screen {
 	@Override
 	public void show() {
 		stage = new Stage(new ScreenViewport());
-		PersonalLeaderBoard leaderBoard = new PersonalLeaderBoard(game, uiSkin);
+		SeedPlayGameDialog dialog = new SeedPlayGameDialog(game, "Confirmation", stage, RottenCave.getUiSkin());
+		PersonalLeaderBoard leaderBoard = new PersonalLeaderBoard(game, uiSkin, dialog);
 		stage.addActor(leaderBoard.getContainer());
 		Gdx.input.setInputProcessor(stage);
-		SeedPlayGameDialog dialog = new SeedPlayGameDialog("Ok", RottenCave.getUiSkin());
-		dialog.show(stage);
+		
 	}
 
 	@Override
@@ -63,5 +63,4 @@ public class PersonalRankScreen implements Screen {
 	public void dispose() {
 		stage.dispose();
 	}
-
 }
