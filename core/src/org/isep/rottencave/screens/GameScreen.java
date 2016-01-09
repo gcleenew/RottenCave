@@ -66,8 +66,11 @@ public class GameScreen implements Screen {
 	public final static float WORLD_HEIGHT = 4.0f;
 	public final static float DISTANCE_RENDERING = 4.0f;
 	
-	private float starterX =  6.4f / 2;
-	private float starterY = 4.0f / 2;
+	private float starterX;
+	private float starterY;
+	
+	private float starterXMonster;
+	private float starterYMonster;
 
 	private final static float DISTANCE_TO_WIN = 0.4f;
 	private final static long MONSTER_POP_TIMER = 5000;
@@ -118,6 +121,8 @@ public class GameScreen implements Screen {
 						starterX = x*0.5f;
 						starterY = y*0.5f;
 					}
+					starterXMonster = x*0.5f;
+					starterYMonster = y*0.5f;
 				}else if(curStatus>1){
 					new BlockMap(world, x, y, curStatus, textureAtlas);
 				}
@@ -249,7 +254,7 @@ public class GameScreen implements Screen {
 	}
 	
 	private void createMonster(){
-		monsterCharacter = new Character(world, starterX, starterY, false);
+		monsterCharacter = new Character(world, starterXMonster, starterYMonster, false);
 		pathFinding = new PathFinding(monsterCharacter, playerCharacter, matriceMap);
 		pathFinding.start();
 	}
