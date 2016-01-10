@@ -139,7 +139,7 @@ public class ProceduralGeneration extends Thread{
 				hall.move();
 			}
 			try {
-				Thread.sleep(1);
+				Thread.sleep(2);
 			} catch (InterruptedException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -261,7 +261,7 @@ public class ProceduralGeneration extends Thread{
 					Corridor corridor = new Corridor(hall, sucessor);
 					corridorList.add(corridor);
 					try {
-						Thread.sleep(150);
+						Thread.sleep(300);
 					} catch (InterruptedException e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();

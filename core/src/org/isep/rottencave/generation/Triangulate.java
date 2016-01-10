@@ -145,7 +145,7 @@ public class Triangulate {
 				}
 				triangles.add(new Triangle(e.p1, e.p2, p));
 				try {
-					Thread.sleep(3);
+					Thread.sleep(20);
 				} catch (InterruptedException e1) {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();
