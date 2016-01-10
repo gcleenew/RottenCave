@@ -70,7 +70,12 @@ public class ProceduralGeneration extends Thread{
 		createCorridor();	
 		isCorridored = true;
 		createHallCorridor();
-				
+		try {
+			Thread.sleep(2400);
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}		
 		Gdx.app.debug("matrice", "Generation de la matrice");
 		MatriceGeneration generation = new MatriceGeneration(hallList);
 		matrice = generation.generate();
