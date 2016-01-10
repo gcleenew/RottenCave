@@ -120,9 +120,10 @@ public class GameScreen implements Screen {
 						firstGroud=true;
 						starterX = x*0.5f;
 						starterY = y*0.5f;
+						starterXMonster = x*0.5f;
+						starterYMonster = y*0.5f;
 					}
-					starterXMonster = x*0.5f;
-					starterYMonster = y*0.5f;
+					
 				}else if(curStatus>1){
 					new BlockMap(world, x, y, curStatus, textureAtlas);
 				}
