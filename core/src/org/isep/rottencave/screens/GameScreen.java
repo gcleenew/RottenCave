@@ -175,6 +175,7 @@ public class GameScreen implements Screen {
 		stage.draw();
 		
 		if(gameover) {
+			pathFinding.setSearch(false);;
 			int score = (int) (System.currentTimeMillis() - startTimer)/1000;
 			Gdx.app.debug("Game Over", "Score : "+score);
 			PersonalScore ps = new PersonalScore(new Date(), score, ProceduralGeneration.getLastSeedUsed());
@@ -325,7 +326,6 @@ public class GameScreen implements Screen {
 		stage.dispose();
 		rayHandler.dispose();
 		ambiance.dispose();
-		pathFinding.stop();
 	}
 
 }

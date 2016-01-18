@@ -18,6 +18,8 @@ public class PathFinding extends Thread {
 
 	private MatriceCell[][] tab;
 	private Character playerCharacter;
+	
+	private boolean search = true;
 
 	public PathFinding(Character monsterCharacter, Character playerCharacter, Matrice matriceMap) {
 		this.monsterCharacter = monsterCharacter;
@@ -29,7 +31,7 @@ public class PathFinding extends Thread {
 
 	@Override
 	public void run() {
-		while (true) {
+		while (search) {
 			PathNode[][] matricePath = new PathNode[tab.length][tab[0].length];
 			LinkedList<PathNode> queue = new LinkedList<PathNode>();
 			
@@ -122,6 +124,10 @@ public class PathFinding extends Thread {
 			return false;
 		}
 		return true;
+	}
+	
+	public void setSearch(boolean search){
+		this.search=search;
 	}
 
 }
