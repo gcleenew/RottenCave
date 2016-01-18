@@ -5,6 +5,7 @@ import org.isep.rottencave.screens.MainMenuScreen;
 import com.badlogic.gdx.Application;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Application.ApplicationType;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
@@ -15,7 +16,12 @@ public class RottenCave extends Game {
 	
 	@Override
 	public void create () {
-		Gdx.app.setLogLevel(Application.LOG_DEBUG);	
+		Gdx.app.setLogLevel(Application.LOG_DEBUG);
+		
+		if (Gdx.app.getType() == ApplicationType.Android) {
+			GlobalConfiguration.REST_URL_BASE = "http://10.0.2.2:8080/RottenCaveServices/";
+		}
+		
 		createSkin();
 		menuMusic = Gdx.audio.newMusic(Gdx.files.internal("music/fight01.mp3"));
 		menuMusic.setLooping(true);
