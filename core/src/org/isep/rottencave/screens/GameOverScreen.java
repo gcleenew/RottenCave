@@ -2,6 +2,7 @@ package org.isep.rottencave.screens;
 
 import java.util.Date;
 
+import org.isep.rottencave.GlobalConfiguration;
 import org.isep.rottencave.RottenCave;
 import org.isep.rottencave.generation.ProceduralGeneration;
 import org.isep.rottencave.scene2d.ButtonRedirectListener;
@@ -50,7 +51,8 @@ public class GameOverScreen implements Screen {
 		stage = new Stage(new ScreenViewport());
 		Gdx.input.setInputProcessor(stage);
 		createStaticMenu();
-		music.play();
+		if (GlobalConfiguration.musicOn)
+			music.play();
 	}
 
 	@Override
